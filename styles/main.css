@@ -1,0 +1,61 @@
+/* Color */
+:root {
+    --colorPrimary:    #bee481;
+    --colorSecondary:  #c47815;
+    --colorBackground: #002b36;
+}
+
+body {
+    background: var(--colorBackground);
+    color: var(--colorPrimary);
+}
+
+body, input[type="button"] {
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
+h1, input[type="textbox"] {
+    text-align: center;
+}
+
+input[type="button"], input[type="textbox"] {
+    margin: auto;
+    border-radius: .5em;
+}
+
+label {
+    float: left;
+    width: 6.8em;
+    text-align: right;
+}
+
+input[type="textbox"] {
+    width: 18.5em;   
+    height: 1.5em;
+    margin: 0 .5em .5em;
+    background: var(--colorPrimary);
+    color: var(--colorBackground);
+    border: 1px solid var(--colorBackground);
+}
+
+input[type="button"] {
+    padding: .5em .7em;
+    margin-top: .5em;
+    display: block;
+    background: none;
+    color: var(--colorPrimary);
+    border: 2px solid var(--colorSecondary);
+}
+
+input[type="button"]:hover {
+    transition: all .3s;
+}
+
+input[type="button"]:hover {
+    cursor: pointer;
+}
+
+input[type="button"]:hover {
+    background: var(--colorSecondary);
+    color: var(--colorBackground);
+}
