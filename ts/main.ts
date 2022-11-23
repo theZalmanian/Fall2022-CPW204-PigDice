@@ -1,14 +1,55 @@
+class Player {
+    playerName:string;
+    totalScore:number;
+
+    /**
+     * Construct's a player object
+     * @param playerName The player's name
+     */
+    constructor(playerName:string) {
+        this.playerName = playerName;
+    }
+}
+
+class Game {
+    currentPlayersTurn:number;
+    currentTurnTotal:number;
+    isGameOver:boolean;
+}
+
+let player1:Player = new Player("John");
+
+player1.totalScore = 0;
+
+let game:Game = new Game;
+
+game.currentTurnTotal = 0;
+
 window.onload = function():void {
-    setupButton("roll-die", rollD6)
+    // setup page buttons
+    setupButton("roll-die", rollD6);
+    setupButton("pass-turn", passTurn);
+}
+
+function passTurn() {
+    let total = player1.totalScore + game.currentTurnTotal;
+
+    // add current total to player total
+    getInputByID("player1-total").value = total.toString();
 }
 
 function rollD6() {
     // simulate a six-sided dice roll by 
     // generating a random number (1 - 6)
-    let rolledValue:number = generateNumberWithinRange(1, 6);
+    let rollValue:number = generateNumberWithinRange(1, 6);
     
-    // output result to page
-    getInputByID("output-score").value = rolledValue.toString();
+    // output current roll to page
+    getInputByID("current-roll").value = rollValue.toString();
+
+    game.currentTurnTotal += rollValue;
+
+    // output current total to page
+    getInputByID("current-total").value = game.currentTurnTotal.toString();
 }
 
 /**
