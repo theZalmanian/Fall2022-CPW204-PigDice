@@ -14,7 +14,7 @@ body, input[type="button"] {
     font-family: Arial, Helvetica, sans-serif; 
 }
 
-h1 {
+header > h1 {
     margin: .5em 0 .2em;
 }
 
@@ -22,7 +22,12 @@ h1, input[type="textbox"] {
     text-align: center;
 }
 
-#game-rules, #start-game-form, #pig-dice-game {
+#page-content {
+    display: grid;
+    grid-template-columns: auto;
+}
+
+#game-rules, #start-game-form, #pig-dice-game, #start-game {
     width: 30em;
     padding: .5em 1em;
     border: 3px solid var(--colorSecondary);
@@ -37,7 +42,7 @@ h1, input[type="textbox"] {
     list-style-type: square;
 }
 
-#player-name-textboxes, #game-buttons {
+#player-name-inputs, #game-buttons {
     width: fit-content;
     margin: auto;
 }
@@ -46,6 +51,17 @@ h1, input[type="textbox"] {
 input[type="button"], input[type="textbox"] {
     margin: .75em auto;
     border-radius: .5em;
+}
+
+#player-scores {
+    width: fit-content;
+    display: flex;
+    margin: auto;
+}
+
+#player1, #player2 {
+    margin: 0 2em;
+    text-align: center;
 }
 
 input[type="textbox"] {
@@ -79,7 +95,7 @@ input[type="button"] {
     display: block;
     background: none;
     color: var(--colorPrimary);
-    border: 2px solid var(--colorSecondary);
+    border: 3px solid var(--colorSecondary);
 }
 
 input[type="button"]:hover {
@@ -98,12 +114,7 @@ input[type="button"][disabled] {
     opacity: 0.65;
 }
 
-#start-game {
-    width: 30em;
-    margin: .5em auto;
-}
-
-#roll-die, #pass-turn {
+#roll-die, #pass-turn, .input-textbox {
     display: inline-block;
     width: 10em;
     margin: .5em .5em;

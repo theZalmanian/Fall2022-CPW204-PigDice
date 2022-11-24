@@ -12,7 +12,7 @@
     <header>
         <h1>Pig Dice</h1>
     </header>
-    <main>
+    <main id="page-content">
         <fieldset id="game-rules">
             <legend>How To Play</legend>
             <ul id="rules-list">
@@ -23,25 +23,30 @@
                 <li>The first player to get 100 points wins</li>
             </ul>
         </fieldset>
-        <fieldset id="start-game-form">
-            <div id="player-name-textboxes">
+        <form id="start-game-form">
+            <div id="player-name-inputs">
                 <input type="textbox" id="player1-name" class="input-textbox" placeholder="Player1 Name">
                 <input type="textbox" id="player2-name" class="input-textbox" placeholder="Player2 Name">
             </div>
             <input type="button" id="start-game" value="Start Game">
-        </fieldset>
+        </form>
         <div id="pig-dice-game">
-            <label>Player1 Score</label>
-            <label>Player2 Score</label>
-            <br>
-            
-            <input type="textbox" id="player1-total" class="output-textbox" disabled>
-            <input type="textbox" id="player2-total" class="output-textbox" disabled>
-            <br>
-            <input type="textbox" id="current-roll" class="output-textbox" disabled>
-            <input type="textbox" id="current-total" class="output-textbox" disabled>
-            <br>
-            
+            <div id="player-scores">
+                <div id="player1">
+                    <label>John's <br> Score</label>
+                    <br>
+                    <input type="textbox" value="0" id="player1-total" class="output-textbox" disabled>
+                </div>
+                <div id="player2">
+                    <label>Michael's <br> Score</label>
+                    <br>
+                    <input type="textbox" value="0" id="player2-total" class="output-textbox" disabled>
+                </div>              
+            </div>
+            <div>
+                <input type="textbox" id="current-roll" class="output-textbox" disabled>
+                <input type="textbox" id="current-total" class="output-textbox" disabled>
+            </div>        
             <div id="game-buttons">
                 <input type="button" id="roll-die" value="Roll Die">
                 <input type="button" id="pass-turn" value="Pass Turn">
