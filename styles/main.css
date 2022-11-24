@@ -1,7 +1,7 @@
 /* Color */
 :root {
     --colorPrimary:    #bee481;
-    --colorSecondary:  #c47815;
+    --colorSecondary:  #c49b15;
     --colorBackground: #002b36;
 }
 
@@ -14,27 +14,38 @@ body, input[type="button"] {
     font-family: Arial, Helvetica, sans-serif; 
 }
 
+h1 {
+    margin: .5em 0 .2em;
+}
+
 h1, input[type="textbox"] {
     text-align: center;
 }
 
-#start-game {
+#game-rules, #start-game, #pig-dice-game {
+    width: 30em;
+    padding: .5em 1em;
+    border: 3px solid var(--colorSecondary);
+}
+
+#rules-list {
+    padding-left: 1.5em;
+    margin: .3em;
+}
+
+#rules-list > li {
+    list-style-type: square;
+}
+
+#player-name-textboxes {
     width: fit-content;
-}
-
-#pig-dice-game {
-    float: right;
-}
-
-input[type="button"], input[type="textbox"] {
     margin: auto;
-    border-radius: .5em;
 }
 
-label {
-    float: left;
-    width: 6.8em;
-    text-align: right;
+#game-rules, #start-game, #pig-dice-game, 
+input[type="button"], input[type="textbox"] {
+    margin: .5em auto;
+    border-radius: .5em;
 }
 
 input[type="textbox"] {
@@ -44,14 +55,22 @@ input[type="textbox"] {
     border: 1px solid var(--colorBackground);
 }
 
-.output-textbox {
-    width: 5.5em;   
-    height: 5.5em;
-}
-
 .input-textbox {
     width: 10.5em;   
     height: 1.5em;
+}
+
+input[type="textbox"]::placeholder {
+    color: var(--colorBackground);
+}
+
+input[type="textbox"]::-ms-input-placeholder {
+    color: var(--colorBackground);
+}
+
+.output-textbox {
+    width: 5.5em;   
+    height: 5.5em;
 }
 
 input[type="button"] {
@@ -68,10 +87,7 @@ input[type="button"]:hover {
 }
 
 input[type="button"]:hover {
-    cursor: pointer;
-}
-
-input[type="button"]:hover {
     background: var(--colorSecondary);
     color: var(--colorBackground);
+    cursor: pointer;
 }
