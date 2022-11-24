@@ -101,6 +101,23 @@ function startGame():void{
 }
 
 /**
+ * When called, ends the game and displays 
+ * a message to the winner
+ */
+function endGame():void {
+    // disable the "Roll Die" and "Pass Turn" buttons
+    getByID("roll-die").setAttribute("disabled", "disabled");
+    getByID("pass-turn").setAttribute("disabled", "disabled");
+
+    // give them the game over class
+    getByID("roll-die").classList.add("game-over");
+    getByID("pass-turn").classList.add("game-over");
+
+    // display winner 
+    getByID("test").innerText = pigDice.currGame.currPlayer.playerName + " has won the game!"; 
+}
+
+/**
  * When a player clicks the "Pass Turn" button or rolls a 1, 
  * adds the current turn total to that player's total score,
  * and then passes the turn on to the next player
@@ -121,11 +138,19 @@ function passTurn():void {
     // display the current players total score on page
     currPlayerTextBox.value = pigDice.currGame.currPlayer.totalScore.toString();
 
-    // reset the turn total
-    resetTurnTotals();
+    // if the current player's total is now 100 or greater
+    if(pigDice.currGame.currPlayer.totalScore >= 10) {
+        // end the game
+        endGame();
+    } 
+    // otherwise swap players
+    else {
+        // reset the turn total
+        resetTurnTotals();
 
-    // switch to the next player
-    switchPlayer();
+        // switch to the next player
+        switchPlayer();
+    }
 }
 
 /**
