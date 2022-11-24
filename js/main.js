@@ -6,25 +6,39 @@ var Player = (function () {
     return Player;
 }());
 var PigDiceGame = (function () {
-    function PigDiceGame(currPlayersTurn) {
-        this.currPlayer = currPlayersTurn;
+    function PigDiceGame(currPlayer, nextPlayer) {
+        this.currPlayer = currPlayer;
+        this.nextPlayer = nextPlayer;
         this.currTurnTotal = 0;
         this.isGameOver = false;
     }
     return PigDiceGame;
 }());
-var player1 = new Player("player1");
-var currGame = new PigDiceGame(player1);
+var CurrentGame = (function () {
+    function CurrentGame() {
+    }
+    return CurrentGame;
+}());
+var game = new CurrentGame;
 window.onload = function () {
+    setupButton("start-game", startGame);
     setupButton("roll-die", rollD6);
     setupButton("pass-turn", passTurn);
 };
+function startGame() {
+    var player1Name = getInputByID("player1-name").value;
+    var player2Name = getInputByID("player2-name").value;
+    var player1 = new Player(player1Name);
+    var player2 = new Player(player2Name);
+    var currPigDiceGame = new PigDiceGame(player1, player2);
+    game.currGame = currPigDiceGame;
+}
 function passTurn() {
-    var turnTotal = currGame.currTurnTotal;
-    currGame.currPlayer.totalScore += turnTotal;
-    var currPlayerName = currGame.currPlayer.playerName;
-    var currPlayerTextBox = getInputByID(currPlayerName + "-total");
-    currPlayerTextBox.value = currGame.currPlayer.totalScore.toString();
+    var turnTotal = game.currGame.currTurnTotal;
+    game.currGame.currPlayer.totalScore += turnTotal;
+    var currPlayerName = game.currGame.currPlayer.playerName;
+    var currPlayerTextBox = getInputByID(currPlayerName.toLowerCase() + "-total");
+    currPlayerTextBox.value = game.currGame.currPlayer.totalScore.toString();
     resetTurnTotals();
 }
 function changePlayers() {
@@ -35,17 +49,17 @@ function rollD6() {
         resetTurnTotals();
     }
     else {
-        currGame.currTurnTotal += rollValue;
+        game.currGame.currTurnTotal += rollValue;
     }
     getInputByID("current-roll").value = rollValue.toString();
-    getInputByID("current-total").value = currGame.currTurnTotal.toString();
+    getInputByID("current-total").value = game.currGame.currTurnTotal.toString();
 }
 function generateNumberWithinRange(min, max) {
     var number = (Math.random() * max) + min;
     return Math.floor(number);
 }
 function resetTurnTotals() {
-    currGame.currTurnTotal = 0;
+    game.currGame.currTurnTotal = 0;
     getInputByID("current-roll").value = "0";
     getInputByID("current-total").value = "0";
 }

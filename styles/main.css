@@ -18,6 +18,14 @@ h1, input[type="textbox"] {
     text-align: center;
 }
 
+#start-game {
+    width: fit-content;
+}
+
+#pig-dice-game {
+    float: right;
+}
+
 input[type="button"], input[type="textbox"] {
     margin: auto;
     border-radius: .5em;
@@ -30,12 +38,20 @@ label {
 }
 
 input[type="textbox"] {
-    width: 5.5em;   
-    height: 5.5em;
     margin: 0 .5em .5em;
     background: var(--colorPrimary);
     color: var(--colorBackground);
     border: 1px solid var(--colorBackground);
+}
+
+.output-textbox {
+    width: 5.5em;   
+    height: 5.5em;
+}
+
+.input-textbox {
+    width: 10.5em;   
+    height: 1.5em;
 }
 
 input[type="button"] {
