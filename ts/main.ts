@@ -64,35 +64,65 @@ window.onload = function():void {
 }
 
 /**
- * When a player hits the "Pass Turn" button or rolls a 1, 
- * passes the turn on to the next player
+ * When a player clicks the "Pass Turn" button or rolls a 1, 
+ * adds the current turn total to that players total score,
+ * and then passes the turn on to the next player
  */
-function passTurn() {
+function passTurn():void {
     // get the total score of the current round
     let turnTotal:number = currGame.currTurnTotal;
 
     // add it to the current players total score
     currGame.currPlayer.totalScore += turnTotal;
 
-    // get the current players total textbox
-    let currPlayerTextBox = getInputByID(currGame.currPlayer.playerName);
+    // get the current players name
+    let currPlayerName:string = currGame.currPlayer.playerName;
+
+    // grab the current players total textbox
+    let currPlayerTextBox = getInputByID(currPlayerName + "-total");
 
     // display the current players total score on page
     currPlayerTextBox.value = currGame.currPlayer.totalScore.toString();
+
+    // reset the turn total
+    resetTurnTotals();
+
+    // swap players
+    // changePlayers();
 }
 
-function rollD6() {
+function changePlayers():void {
+    
+}
+
+/**
+ * When the "Roll Die" button is clicked, rolls a six-sided die
+ * and displays the value on the page
+ */
+function rollD6():void {
     // simulate a six-sided dice roll by 
     // generating a random number (1 - 6)
     let rollValue:number = generateNumberWithinRange(1, 6);
-    
-    // display current roll value
+
+    // if the roll value is 1
+    if(rollValue == 1) {
+        // swap players
+        // changePlayers();
+
+        // set current total to 0
+        resetTurnTotals();
+    }
+
+    // if the roll value is not 1
+    else {
+        // add roll value to turn total
+        currGame.currTurnTotal += rollValue;
+    }
+
+    // display roll value
     getInputByID("current-roll").value = rollValue.toString();
 
-    // calculate the new turn total
-    currGame.currTurnTotal += rollValue;
-
-    // display it on the page
+    // display current total on page
     getInputByID("current-total").value = currGame.currTurnTotal.toString();
 }
 
@@ -115,6 +145,18 @@ function generateNumberWithinRange(min:number, max:number):number {
 /****************
 **** HELPERS ****
 ****************/
+
+/**
+ * Resets the total turn score to 0 for all relevant trackers
+ */
+function resetTurnTotals():void {
+    // reset the total turn score for the game
+    currGame.currTurnTotal = 0;
+
+    // reset the "current" textboxes values to 0
+    getInputByID("current-roll").value = "0";
+    getInputByID("current-total").value = "0";
+}
 
 /**
  * Sets up an onclick event for a button
