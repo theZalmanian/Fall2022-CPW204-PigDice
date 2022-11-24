@@ -119,3 +119,14 @@ input[type="button"][disabled] {
     width: 10em;
     margin: .5em .5em;
 }
+
+#turn-totals {
+    width: fit-content;
+    margin: auto;
+}
+
+#roll-display {
+    height: 50px;
+    width: 50px;
+    transition: all .3s;
+}
