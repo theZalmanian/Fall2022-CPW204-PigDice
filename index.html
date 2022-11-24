@@ -9,22 +9,38 @@
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-    <h1 id="test">Pig Dice</h1>
-    <div id="start-game">
-        <input type="textbox" id="player1-name" class="input-textbox" placeholder="Player1 Name">
-        <input type="textbox" id="player2-name" class="input-textbox" placeholder="Player2 Name">
-        <input type="button" id="start-game" value="Start Game">
-    </div>
-    <div id="pig-dice-game">
-        <input type="textbox" id="player1-total" class="output-textbox" disabled>
-        <input type="textbox" id="player2-total" class="output-textbox" disabled>
-        <br>
-        <input type="textbox" id="current-roll" class="output-textbox" disabled>
-        <input type="textbox" id="current-total" class="output-textbox" disabled>
-        
-        <input type="button" id="roll-die" value="Roll Die">
-        <input type="button" id="pass-turn" value="Pass Turn">
-    </div>
+    <header>
+        <h1>Pig Dice</h1>
+    </header>
+    <main>
+        <fieldset id="game-rules">
+            <legend>How To Play</legend>
+            <ul id="rules-list">
+                <li>Players take turns rolling the die</li>
+                <li>A players turn ends when they roll a 1 or, chooses to pass</li>
+                <li>If a player rolls a 1, they lose all points earned during the turn</li>
+                <li>If a player passes, points earned during that turn are added to their total</li>
+                <li>The first player to get 100 points wins</li>
+            </ul>
+        </fieldset>
+        <fieldset id="start-game">
+            <div id="player-name-textboxes">
+                <input type="textbox" id="player1-name" class="input-textbox" placeholder="Player1 Name">
+                <input type="textbox" id="player2-name" class="input-textbox" placeholder="Player2 Name">
+            </div>
+            <input type="button" id="start-game" value="Start Game">
+        </fieldset>
+        <div id="pig-dice-game">
+            <input type="textbox" id="player1-total" class="output-textbox" disabled>
+            <input type="textbox" id="player2-total" class="output-textbox" disabled>
+            <br>
+            <input type="textbox" id="current-roll" class="output-textbox" disabled>
+            <input type="textbox" id="current-total" class="output-textbox" disabled>
+            
+            <input type="button" id="roll-die" value="Roll Die">
+            <input type="button" id="pass-turn" value="Pass Turn">
+        </div>
+    </main>
 
     <script src="js/main.js"></script>
 </body>
