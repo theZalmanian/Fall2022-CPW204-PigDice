@@ -19,26 +19,41 @@ var PigDice = (function () {
     }
     return PigDice;
 }());
-var pigDice = new PigDice;
 window.onload = function () {
     setupButton("start-game", startGame);
     setupButton("roll-die", rollDie);
     setupButton("pass-turn", passTurn);
 };
+var pigDice = new PigDice;
 function startGame() {
     var player1Name = getInputByID("player1-name").value;
     var player2Name = getInputByID("player2-name").value;
     var player1 = new Player(player1Name);
     var player2 = new Player(player2Name);
-    var currPigDiceGame = new Game(player1, player2);
-    pigDice.currGame = currPigDiceGame;
+    var newGame = new Game(player1, player2);
+    pigDice.currGame = newGame;
 }
 function endGame() {
     getByID("roll-die").setAttribute("disabled", "disabled");
     getByID("pass-turn").setAttribute("disabled", "disabled");
     getByID("roll-die").classList.add("game-over");
     getByID("pass-turn").classList.add("game-over");
-    getByID("test").innerText = pigDice.currGame.currPlayer.playerName + " has won the game!";
+}
+function rollDie() {
+    displayD6Roll();
+    setTimeout(rollD6, 1000);
+}
+function rollD6() {
+    var rollValue = generateNumberWithinRange(1, 6);
+    if (rollValue == 1) {
+        switchPlayer();
+        resetTurnTotal();
+    }
+    else {
+        pigDice.currGame.currTurnTotal += rollValue;
+    }
+    displayD6Face(rollValue);
+    getInputByID("current-total").value = pigDice.currGame.currTurnTotal.toString();
 }
 function passTurn() {
     displayD6Idle();
@@ -51,7 +66,7 @@ function passTurn() {
         endGame();
     }
     else {
-        resetTurnTotals();
+        resetTurnTotal();
         switchPlayer();
     }
 }
@@ -61,23 +76,7 @@ function switchPlayer() {
     pigDice.currGame.currPlayer = nextPlayer;
     pigDice.currGame.nextPlayer = currPlayer;
 }
-function rollDie() {
-    displayD6Roll();
-    setTimeout(rollD6, 1000);
-}
-function rollD6() {
-    var rollValue = generateNumberWithinRange(1, 6);
-    if (rollValue == 1) {
-        switchPlayer();
-        resetTurnTotals();
-    }
-    else {
-        pigDice.currGame.currTurnTotal += rollValue;
-    }
-    displayD6(rollValue);
-    getInputByID("current-total").value = pigDice.currGame.currTurnTotal.toString();
-}
-function displayD6(rollValue) {
+function displayD6Face(rollValue) {
     if (rollValue == 6) {
         getImageByID("roll-display").src = "images/dice-icons/d6-side-6.svg";
     }
@@ -107,9 +106,9 @@ function generateNumberWithinRange(min, max) {
     var number = (Math.random() * max) + min;
     return Math.floor(number);
 }
-function resetTurnTotals() {
+function resetTurnTotal() {
     pigDice.currGame.currTurnTotal = 0;
-    getInputByID("current-total").value = "0";
+    getInputByID("turn-total").value = "0";
 }
 function setupButton(id, useFunction) {
     var button = getByID(id);

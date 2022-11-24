@@ -70,9 +70,6 @@ class PigDice {
     currGame:Game;
 }
 
-// create an empty instance of pig dice game
-let pigDice:PigDice = new PigDice;
-
 window.onload = function():void {
     // setup onclick events for page buttons
     setupButton("start-game", startGame)
@@ -80,9 +77,16 @@ window.onload = function():void {
     setupButton("pass-turn", passTurn);
 }
 
+/*******************
+**** GAME STATE ****
+*******************/
+
+// create an empty instance of pig dice game
+let pigDice:PigDice = new PigDice;
+
 /**
  * When the "Start Game" button is clicked, creates and begins
- * a new instance of the "Pig Dice" game
+ * a new instance of a "Pig Dice" game
  */
 function startGame():void{ 
     // get both player's names from their respective inputs
@@ -94,10 +98,10 @@ function startGame():void{
     let player2:Player = new Player(player2Name);
 
     // create a new instance of pig dice game
-    let currPigDiceGame:Game = new Game(player1, player2);
+    let newGame:Game = new Game(player1, player2);
 
     // set it as the current game
-    pigDice.currGame = currPigDiceGame;
+    pigDice.currGame = newGame;
 
     // // remove the start game form from the page
     // getByID("page-content").removeChild(getByID("start-game-form"));
@@ -117,63 +121,13 @@ function endGame():void {
     getByID("pass-turn").classList.add("game-over");
 
     // display winner 
-    getByID("test").innerText = pigDice.currGame.currPlayer.playerName + " has won the game!"; 
+    //getByID("test").innerText = 
+    // pigDice.currGame.currPlayer.playerName + " has won the game!"; 
 }
 
-/**
- * When a player clicks the "Pass Turn" button or rolls a 1, 
- * adds the current turn total to that player's total score,
- * and then passes the turn on to the next player
- */
-function passTurn():void {
-    // display the d6 at its idle state
-    displayD6Idle();
-
-    // get the total score of the current round
-    let turnTotal:number = pigDice.currGame.currTurnTotal;
-
-    // add it to the current players total score
-    pigDice.currGame.currPlayer.totalScore += turnTotal;
-
-    // get the current players name
-    let currPlayerName:string = pigDice.currGame.currPlayer.playerName;
-
-    // grab the current players total textbox
-    let currPlayerTextBox = getInputByID(currPlayerName.toLowerCase() + "-total");
-
-    // display the current players total score on page
-    currPlayerTextBox.value = pigDice.currGame.currPlayer.totalScore.toString();
-
-    // if the current player's total is now 100 or greater
-    if(pigDice.currGame.currPlayer.totalScore >= 10) {
-        // end the game
-        endGame();
-    } 
-    // otherwise swap players
-    else {
-        // reset the turn total
-        resetTurnTotals();
-
-        // switch to the next player
-        switchPlayer();
-    }
-}
-
-/**
- * When called, changes the player whose turn it is currently
- * to the next player in the game
- */
-function switchPlayer():void {
-    // get the player whose turn it is currently
-    let currPlayer = pigDice.currGame.currPlayer;
-
-    // get the player whose turn it is next
-    let nextPlayer = pigDice.currGame.nextPlayer;
-
-    // swap their positions
-    pigDice.currGame.currPlayer = nextPlayer;
-    pigDice.currGame.nextPlayer = currPlayer;
-}
+/******************
+**** PLAY GAME ****
+******************/
 
 /**
  * When the "Roll Die" button is clicked, simulates the roll of a
@@ -201,7 +155,7 @@ function rollD6():void {
         switchPlayer();
 
         // reset the current turn total
-        resetTurnTotals();
+        resetTurnTotal();
     }
 
     // if the roll value is not 1
@@ -211,18 +165,77 @@ function rollD6():void {
     }
 
     // display roll value
-    displayD6(rollValue); 
+    displayD6Face(rollValue); 
 
     // display current total on page
     getInputByID("current-total").value = pigDice.currGame.currTurnTotal.toString();
 }
 
 /**
- * Displays an image of a dice face corresponding to 
+ * When a player clicks the "Pass Turn" button or rolls a 1, 
+ * adds the current turn total to that player's total score,
+ * and then passes the turn on to the next player
+ */
+ function passTurn():void {
+    // display the d6 at its idle state
+    displayD6Idle();
+
+    // get the total score of the current round
+    let turnTotal:number = pigDice.currGame.currTurnTotal;
+
+    // add it to the current players total score
+    pigDice.currGame.currPlayer.totalScore += turnTotal;
+
+    // get the current players name
+    let currPlayerName:string = pigDice.currGame.currPlayer.playerName;
+
+    // grab the current players total textbox
+    let currPlayerTextBox = getInputByID(currPlayerName.toLowerCase() + "-total");
+
+    // display the current players total score on page
+    currPlayerTextBox.value = pigDice.currGame.currPlayer.totalScore.toString();
+
+    // if the current player's total is now 100 or greater
+    if(pigDice.currGame.currPlayer.totalScore >= 10) {
+        // end the game
+        endGame();
+    } 
+    // otherwise swap players
+    else {
+        // reset the turn total
+        resetTurnTotal();
+
+        // switch to the next player
+        switchPlayer();
+    }
+}
+
+/**
+ * When called, changes the player whose turn it is currently
+ * to the next player in the game
+ */
+function switchPlayer():void {
+    // get the player whose turn it is currently
+    let currPlayer = pigDice.currGame.currPlayer;
+
+    // get the player whose turn it is next
+    let nextPlayer = pigDice.currGame.nextPlayer;
+
+    // swap their positions
+    pigDice.currGame.currPlayer = nextPlayer;
+    pigDice.currGame.nextPlayer = currPlayer;
+}
+
+/*******************
+**** d6 DISPLAY ****
+*******************/
+
+/**
+ * Displays an image of a die face corresponding to 
  * the passed through number (for a six-sided die)
  * @param rollValue The value the six-sided die landed on
  */
-function displayD6(rollValue:number):void {
+function displayD6Face(rollValue:number):void {
     // Based on the rolled value, display the corresponding image
     if(rollValue == 6) {
         getImageByID("roll-display").src = "images/dice-icons/d6-side-6.svg";
@@ -245,8 +258,8 @@ function displayD6(rollValue:number):void {
 }
 
 /**
- * Displays an image of a hand throwing up a singular die to 
- * simulate a "die roll"
+ * Displays an image of a hand throwing up a six-sided die 
+ * to simulate a "die roll"
  */
 function displayD6Roll():void {
     getImageByID("roll-display").src = "images/dice-icons/d6-roll.svg";
@@ -259,13 +272,17 @@ function displayD6Idle():void {
     getImageByID("roll-display").src = "images/dice-icons/d6-idle.svg";
 }
 
+/****************
+**** HELPERS ****
+****************/
+
 /**
  * Generates a random number within the given range
  * @param min The lower limit of the range (inclusive)
  * @param max The upper limit of the range (inclusive)
  * @returns The generated number
  */
-function generateNumberWithinRange(min:number, max:number):number {
+ function generateNumberWithinRange(min:number, max:number):number {
     // generate a random number between min and max
     let number:number =  (Math.random() * max) + min;
     
@@ -274,20 +291,15 @@ function generateNumberWithinRange(min:number, max:number):number {
     return Math.floor(number);
 }
 
-
-/****************
-**** HELPERS ****
-****************/
-
 /**
- * Resets the total turn score to 0 for all relevant trackers
+ * Resets the total turn score for all relevant trackers
  */
-function resetTurnTotals():void {
-    // reset the total turn score for the game
+function resetTurnTotal():void {
+    // reset the turn total score for the game
     pigDice.currGame.currTurnTotal = 0;
 
-    // reset the "current" textboxes values to 0
-    getInputByID("current-total").value = "0";
+    // reset the turn total textbox
+    getInputByID("turn-total").value = "0";
 }
 
 /**
