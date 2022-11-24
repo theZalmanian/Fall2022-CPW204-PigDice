@@ -25,7 +25,7 @@ class Player {
 /**
  * Represents a game of pig dice
  */
-class PigDiceGame {
+class Game {
     /**
      * The player whose turn it is currently 
      * (Player 1 at start of game)
@@ -49,7 +49,7 @@ class PigDiceGame {
     isGameOver:boolean;
 
     /**
-     * Creates a pig dice game object to keep track of the relevant game data
+     * Creates a  game object to keep track of the relevant game data
      * @param currPlayer The player whose turn it is currently (Player 1 at start of game)
      */
     constructor(currPlayer:Player, nextPlayer:Player) {
@@ -63,15 +63,15 @@ class PigDiceGame {
 /**
  * Represents the current game of pig dice being played
  */
-class CurrentGame {
+class PigDice {
     /**
      * The current game of pig dice being played
      */
-    currGame:PigDiceGame;
+    currGame:Game;
 }
 
-// create an empty instance of current game
-let game:CurrentGame = new CurrentGame;
+// create an empty instance of pig dice game
+let pigDice:PigDice = new PigDice;
 
 window.onload = function():void {
     // setup onclick events for page buttons
@@ -94,10 +94,10 @@ function startGame():void{
     let player2:Player = new Player(player2Name);
 
     // create a new instance of pig dice game
-    let currPigDiceGame:PigDiceGame = new PigDiceGame(player1, player2);
+    let currPigDiceGame:Game = new Game(player1, player2);
 
     // set it as the current game
-    game.currGame = currPigDiceGame;
+    pigDice.currGame = currPigDiceGame;
 }
 
 /**
@@ -107,29 +107,41 @@ function startGame():void{
  */
 function passTurn():void {
     // get the total score of the current round
-    let turnTotal:number = game.currGame.currTurnTotal;
+    let turnTotal:number = pigDice.currGame.currTurnTotal;
 
     // add it to the current players total score
-    game.currGame.currPlayer.totalScore += turnTotal;
+    pigDice.currGame.currPlayer.totalScore += turnTotal;
 
     // get the current players name
-    let currPlayerName:string = game.currGame.currPlayer.playerName;
+    let currPlayerName:string = pigDice.currGame.currPlayer.playerName;
 
     // grab the current players total textbox
     let currPlayerTextBox = getInputByID(currPlayerName.toLowerCase() + "-total");
 
     // display the current players total score on page
-    currPlayerTextBox.value = game.currGame.currPlayer.totalScore.toString();
+    currPlayerTextBox.value = pigDice.currGame.currPlayer.totalScore.toString();
 
     // reset the turn total
     resetTurnTotals();
 
-    // swap players
-    // changePlayers();
+    // switch to the next player
+    switchPlayer();
 }
 
-function changePlayers():void {
-    
+/**
+ * When called, changes the player whose turn it is currently
+ * to the next player in the game
+ */
+function switchPlayer():void {
+    // get the player whose turn it is currently
+    let currPlayer = pigDice.currGame.currPlayer;
+
+    // get the player whose turn it is next
+    let nextPlayer = pigDice.currGame.nextPlayer;
+
+    // swap their positions
+    pigDice.currGame.currPlayer = nextPlayer;
+    pigDice.currGame.nextPlayer = currPlayer;
 }
 
 /**
@@ -143,24 +155,24 @@ function rollD6():void {
 
     // if the roll value is 1
     if(rollValue == 1) {
-        // swap players
-        // changePlayers();
+        // switch to the next player
+        switchPlayer();
 
-        // set current total to 0
+        // reset the current turn total
         resetTurnTotals();
     }
 
     // if the roll value is not 1
     else {
         // add roll value to turn total
-        game.currGame.currTurnTotal += rollValue;
+        pigDice.currGame.currTurnTotal += rollValue;
     }
 
     // display roll value
     getInputByID("current-roll").value = rollValue.toString();
 
     // display current total on page
-    getInputByID("current-total").value = game.currGame.currTurnTotal.toString();
+    getInputByID("current-total").value = pigDice.currGame.currTurnTotal.toString();
 }
 
 /**
@@ -188,7 +200,7 @@ function generateNumberWithinRange(min:number, max:number):number {
  */
 function resetTurnTotals():void {
     // reset the total turn score for the game
-    game.currGame.currTurnTotal = 0;
+    pigDice.currGame.currTurnTotal = 0;
 
     // reset the "current" textboxes values to 0
     getInputByID("current-roll").value = "0";
