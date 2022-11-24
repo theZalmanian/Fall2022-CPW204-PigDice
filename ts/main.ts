@@ -76,7 +76,7 @@ let pigDice:PigDice = new PigDice;
 window.onload = function():void {
     // setup onclick events for page buttons
     setupButton("start-game", startGame)
-    setupButton("roll-die", rollD6);
+    setupButton("roll-die", rollDie);
     setupButton("pass-turn", passTurn);
 }
 
@@ -98,6 +98,9 @@ function startGame():void{
 
     // set it as the current game
     pigDice.currGame = currPigDiceGame;
+
+    // // remove the start game form from the page
+    // getByID("page-content").removeChild(getByID("start-game-form"));
 }
 
 /**
@@ -123,6 +126,9 @@ function endGame():void {
  * and then passes the turn on to the next player
  */
 function passTurn():void {
+    // display the d6 at its idle state
+    displayD6Idle();
+
     // get the total score of the current round
     let turnTotal:number = pigDice.currGame.currTurnTotal;
 
@@ -170,8 +176,19 @@ function switchPlayer():void {
 }
 
 /**
- * When the "Roll Die" button is clicked, rolls a six-sided die
- * and displays the value on the page
+ * When the "Roll Die" button is clicked, simulates the roll of a
+ * six-sided die and displays the roll value on the page
+ */
+ function rollDie() {
+    // display roll transition image
+    displayD6Roll();
+    
+    // after 1 second display the roll result
+    setTimeout(rollD6, 1000);
+}
+
+/**
+ * Rolls a six-sided die and displays the value on the page
  */
 function rollD6():void {
     // simulate a six-sided dice roll by 
@@ -194,10 +211,52 @@ function rollD6():void {
     }
 
     // display roll value
-    getInputByID("current-roll").value = rollValue.toString();
+    displayD6(rollValue); 
 
     // display current total on page
     getInputByID("current-total").value = pigDice.currGame.currTurnTotal.toString();
+}
+
+/**
+ * Displays an image of a dice face corresponding to 
+ * the passed through number (for a six-sided die)
+ * @param rollValue The value the six-sided die landed on
+ */
+function displayD6(rollValue:number):void {
+    // Based on the rolled value, display the corresponding image
+    if(rollValue == 6) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-side-6.svg";
+    }
+    else if(rollValue == 5) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-side-5.svg";
+    }
+    else if(rollValue == 4) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-side-4.svg";
+    }
+    else if(rollValue == 3) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-side-3.svg";
+    }
+    else if(rollValue == 2) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-side-2.svg";
+    }
+    else if(rollValue == 1) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-side-1.svg";
+    }
+}
+
+/**
+ * Displays an image of a hand throwing up a singular die to 
+ * simulate a "die roll"
+ */
+function displayD6Roll():void {
+    getImageByID("roll-display").src = "images/dice-icons/d6-roll.svg";
+}
+
+/**
+ * Displays a 3d image of a six-sided die
+ */
+function displayD6Idle():void {
+    getImageByID("roll-display").src = "images/dice-icons/d6-idle.svg";
 }
 
 /**
@@ -228,7 +287,6 @@ function resetTurnTotals():void {
     pigDice.currGame.currTurnTotal = 0;
 
     // reset the "current" textboxes values to 0
-    getInputByID("current-roll").value = "0";
     getInputByID("current-total").value = "0";
 }
 
@@ -243,8 +301,17 @@ function setupButton(id:string, useFunction:() => void):void {
 }
 
 /**
+ * Gets an HTML Image Element by it's ID
+ * @param id - The image's id
+ * @returns The corresponding HTML Image Element
+ */
+function getImageByID(id:string):HTMLImageElement {
+    return <HTMLImageElement> getByID(id);
+}
+
+/**
  * Gets an HTML Input Element by it's ID
- * @param id - The input's id
+ * @param id The input's id
  * @returns The corresponding HTML Input Element
  */
 function getInputByID(id:string):HTMLInputElement {
@@ -253,7 +320,7 @@ function getInputByID(id:string):HTMLInputElement {
 
 /**
  * Shortened form of the document.getElementById method
- * @param id - The element's id
+ * @param id The element's id
  * @returns The corresponding HTML Element
  */
 function getByID(id:string):HTMLElement {
