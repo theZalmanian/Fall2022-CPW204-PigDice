@@ -1,7 +1,7 @@
 /* Color */
 :root {
-    --colorPrimary:    #bee481;
-    --colorSecondary:  #c49b15;
+    --colorPrimary:    #e0d186;
+    --colorSecondary:  #6dc415;
     --colorBackground: #002b36;
 }
 
@@ -22,7 +22,7 @@ h1, input[type="textbox"] {
     text-align: center;
 }
 
-#game-rules, #start-game, #pig-dice-game {
+#game-rules, #start-game-form, #pig-dice-game {
     width: 30em;
     padding: .5em 1em;
     border: 3px solid var(--colorSecondary);
@@ -37,27 +37,27 @@ h1, input[type="textbox"] {
     list-style-type: square;
 }
 
-#player-name-textboxes {
+#player-name-textboxes, #game-buttons {
     width: fit-content;
     margin: auto;
 }
 
-#game-rules, #start-game, #pig-dice-game, 
+#game-rules, #start-game-form, #pig-dice-game,
 input[type="button"], input[type="textbox"] {
-    margin: .5em auto;
+    margin: .75em auto;
     border-radius: .5em;
 }
 
 input[type="textbox"] {
-    margin: 0 .5em .5em;
+    margin: .5em .5em;
     background: var(--colorPrimary);
     color: var(--colorBackground);
-    border: 1px solid var(--colorBackground);
+    border: 2px solid var(--colorSecondary);
 }
 
 .input-textbox {
     width: 10.5em;   
-    height: 1.5em;
+    height: 2em;
 }
 
 input[type="textbox"]::placeholder {
@@ -69,12 +69,12 @@ input[type="textbox"]::-ms-input-placeholder {
 }
 
 .output-textbox {
-    width: 5.5em;   
-    height: 5.5em;
+    width: 3.5em;   
+    height: 3.5em;
 }
 
 input[type="button"] {
-    padding: .5em .7em;
+    padding: .5em .5em;
     margin-top: .5em;
     display: block;
     background: none;
@@ -90,4 +90,21 @@ input[type="button"]:hover {
     background: var(--colorSecondary);
     color: var(--colorBackground);
     cursor: pointer;
+}
+
+input[type="button"][disabled] {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+#start-game {
+    width: 30em;
+    margin: .5em auto;
+}
+
+#roll-die, #pass-turn {
+    display: inline-block;
+    width: 10em;
+    margin: .5em .5em;
 }
