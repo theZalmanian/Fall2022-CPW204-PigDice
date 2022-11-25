@@ -109,15 +109,21 @@ function startGame():void{
     // display the new current player
     getByID("turn-display").innerHTML = player1Name + "'s Turn";
     
-    // // remove the start game form from the page
+    // remove the start game form from the page
     getByID("start-game-form").innerHTML = "";
-    createLoadingIcon("start-game-form");
-    setTimeout(test, 2000);
+    setTimeout(removeStartForm, 3000);
+
+    // display preloader
+    displayPreloader("start-game-form", 3000);
 }
 
-function test() {
+/**
+ * When called, removes the start form from the page,
+ * and displays the pig dice game
+ */
+function removeStartForm():void {
     getByID("page-content").removeChild(getByID("start-game-form"));
-    createPigDiceGame();
+    displayPigDiceGame();
 }
 
 /**
@@ -153,7 +159,7 @@ function endGame():void {
  * Creates the elements needed to play the pig dice game, 
  * and makes the game visible when the required elements are created
  */
-function createPigDiceGame() {
+function displayPigDiceGame() {
     // create the roll-die button
     createGameButton("roll-die", "Roll Die");
 
@@ -236,30 +242,45 @@ function createInput(inputType:string, inputID:string, inputClass:string, inputT
 }
 
 /**
- * Creates a moving loader within the specified element,
+ * Creates a moving preloader within the specified element,
  * and removes it after the specified time
- * @param createWithin The id of the HTML element the loader is being created in
+ * @param createWithin The id of the HTML element the preloader is being created in
+ * @param removeAfter The time after which the preloader will be removed (milliseconds)
  */
-function createLoadingIcon(createWithin:string):void {
+function displayPreloader(createWithin:string, removeAfter:number):void {
     // create a container div
-    let loaderContainer = createElement("div");
+    let preloaderContainer = createElement("div");
 
     // give it the lds-ellipsis class
-    loaderContainer.classList.add("lds-ellipsis");
+    preloaderContainer.classList.add("lds-ellipsis");
 
-    // give it the loader id
-    loaderContainer.setAttribute("id", "loader");
+    // give it the preloader id
+    preloaderContainer.setAttribute("id", "preloader");
 
     for(let currDiv:number = 0; currDiv < 4; currDiv++) {
         // create four more divs
         let circle = createElement("div");
         
-        // and place them in the loader container
-        loaderContainer.appendChild(circle);
+        // and place them in the preloader container
+        preloaderContainer.appendChild(circle);
     }
 
-    // place the loader container within the specified element
-    getByID(createWithin).appendChild(loaderContainer);
+    // empty the element the preloader will be displayed in
+    getByID(createWithin).innerHTML = "";
+
+    // place the preloader within the specified element
+    getByID(createWithin).appendChild(preloaderContainer);
+
+    // remove it after the given interval 
+    setTimeout(removePreloader, removeAfter);
+}
+
+/**
+ * When called removes the preloader from the page
+ */
+function removePreloader():void {
+    // remove the preloader from the page
+    getByID("preloader").remove();
 }
 
 /******************
@@ -331,8 +352,11 @@ function rollD6():void {
 
     // if the current player's total is now 100 or greater
     if(pigDice.currGame.currPlayer.totalScore >= 10) {
+        // display preloader
+        displayPreloader("turn-display", 2000);
+
         // end the game
-        endGame();
+        setTimeout(endGame, 2000);
     } 
     // otherwise swap players
     else {
