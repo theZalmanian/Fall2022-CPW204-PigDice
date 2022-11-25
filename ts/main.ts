@@ -71,17 +71,17 @@ class PigDice {
 }
 
 window.onload = function():void {
-    // setup onclick events for page buttons
-    setupButton("start-game", startGame)
-    setupButton("roll-die", rollDie);
-    setupButton("pass-turn", passTurn);
+    // setup onclick event for Start Game button
+    setupButton("start-game", startGame);
 }
 
 /*******************
 **** GAME STATE ****
 *******************/
 
-// create an empty instance of pig dice game
+/**
+ * The current game of pig dice
+ */
 let pigDice:PigDice = new PigDice;
 
 /**
@@ -108,9 +108,15 @@ function startGame():void{
 
     // display the new current player
     getByID("turn-display").innerHTML = player1Name + "'s Turn";
-
+    
     // // remove the start game form from the page
-    // getByID("page-content").removeChild(getByID("start-game-form"));
+    getByID("start-game-form").innerHTML = "<h1>...<h1>";
+    setTimeout(test, 2000);
+}
+
+function test() {
+    getByID("page-content").removeChild(getByID("start-game-form"));
+    createPigDiceGame();
 }
 
 /**
@@ -137,6 +143,92 @@ function endGame():void {
 
     // display message
     getByID("turn-display").innerText = gameOverMessage; 
+}
+
+/************************
+**** CREATE ELEMENTS ****
+************************/
+
+function createPigDiceGame() {
+    // create the roll-die button
+    createGameButton("roll-die", "Roll Die");
+
+    // create the pass-turn button
+    createGameButton("pass-turn", "Pass Turn");
+
+    // set up their on-click events
+    setupButton("roll-die", rollDie);
+    setupButton("pass-turn", passTurn);
+
+    // get player1 and player2's names
+    let player1Name:string = pigDice.currGame.currPlayer.playerName;
+    let player2Name:string = pigDice.currGame.nextPlayer.playerName;
+
+    // create their score total textboxes
+    createTotalTextbox(player1Name.toLowerCase() + "-total", "player1");
+    createTotalTextbox(player2Name.toLowerCase() + "-total", "player2");
+
+    // make the pig-dice-game div visible
+    getByID("pig-dice-game").style.opacity = "1";
+}
+
+/**
+ * Creates a "game" button with the given id,
+ * and places the given text within it
+ * @param buttonID The id being given to the button
+ * @param buttonText The text being displayed in the button
+ */
+function createGameButton(buttonID:string, buttonText:string):void {
+    // create a game button with the given data
+    let newButton:HTMLInputElement = createInput("button", buttonID, "game-button", buttonText);
+
+    // add it into the game-buttons div
+    getByID("game-buttons").appendChild(newButton);
+}
+
+/**
+ * Creates a "score total" textbox with the given id,
+ * and places it within the given div
+ * @param textBoxID The id being given to the textbox
+ * @param createWithin The id of the HTML element the textbox is being created in
+ */
+function createTotalTextbox(textBoxID:string, createWithin:string):void {
+    // create a total textbox with the given data
+    let newTextBox = createInput("textbox", textBoxID, "output-textbox", "0");
+
+    // disable the textbox
+    newTextBox.setAttribute("disabled", "disabled");
+
+    // add it into the given div
+    getByID(createWithin).appendChild(newTextBox);
+}
+
+/**
+ * Creates and returns an HTML Input Element with the given attributes
+ * @param inputType The input element's type, such as textbox or button
+ * @param inputID The id being given to the element
+ * @param inputClass The class being given to the element
+ * @param inputText The text being placed within the element
+ * @returns The newly created HTML Input Element
+ */
+function createInput(inputType:string, inputID:string, inputClass:string, inputText):HTMLInputElement {
+    // create an html input element
+    let newInput = <HTMLInputElement> document.createElement("input");
+    
+    // make it the specified input element
+    newInput.setAttribute("type", inputType);
+
+    // give it the specified id
+    newInput.setAttribute("id", inputID);
+
+    // give it the specified class
+    newInput.classList.add(inputClass);
+
+    // place the specified text within it
+    newInput.setAttribute("value", inputText);
+
+    // return the input
+    return newInput;
 }
 
 /******************

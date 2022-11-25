@@ -21,8 +21,6 @@ var PigDice = (function () {
 }());
 window.onload = function () {
     setupButton("start-game", startGame);
-    setupButton("roll-die", rollDie);
-    setupButton("pass-turn", passTurn);
 };
 var pigDice = new PigDice;
 function startGame() {
@@ -35,6 +33,12 @@ function startGame() {
     getByID("player1-label").innerHTML = player1Name + "'s";
     getByID("player2-label").innerHTML = player2Name + "'s";
     getByID("turn-display").innerHTML = player1Name + "'s Turn";
+    getByID("start-game-form").innerHTML = "<h1>...<h1>";
+    setTimeout(test, 2000);
+}
+function test() {
+    getByID("page-content").removeChild(getByID("start-game-form"));
+    createPigDiceGame();
 }
 function endGame() {
     getByID("roll-die").setAttribute("disabled", "disabled");
@@ -45,6 +49,34 @@ function endGame() {
     var totalScore = pigDice.currGame.currPlayer.totalScore;
     var gameOverMessage = winnerName + " has won the game with " + totalScore + " points!";
     getByID("turn-display").innerText = gameOverMessage;
+}
+function createPigDiceGame() {
+    createGameButton("roll-die", "Roll Die");
+    createGameButton("pass-turn", "Pass Turn");
+    setupButton("roll-die", rollDie);
+    setupButton("pass-turn", passTurn);
+    var player1Name = pigDice.currGame.currPlayer.playerName;
+    var player2Name = pigDice.currGame.nextPlayer.playerName;
+    createTotalTextbox(player1Name.toLowerCase() + "-total", "player1");
+    createTotalTextbox(player2Name.toLowerCase() + "-total", "player2");
+    getByID("pig-dice-game").style.opacity = "1";
+}
+function createGameButton(buttonID, buttonText) {
+    var newButton = createInput("button", buttonID, "game-button", buttonText);
+    getByID("game-buttons").appendChild(newButton);
+}
+function createTotalTextbox(textBoxID, createWithin) {
+    var newTextBox = createInput("textbox", textBoxID, "output-textbox", "0");
+    newTextBox.setAttribute("disabled", "disabled");
+    getByID(createWithin).appendChild(newTextBox);
+}
+function createInput(inputType, inputID, inputClass, inputText) {
+    var newInput = document.createElement("input");
+    newInput.setAttribute("type", inputType);
+    newInput.setAttribute("id", inputID);
+    newInput.classList.add(inputClass);
+    newInput.setAttribute("value", inputText);
+    return newInput;
 }
 function rollDie() {
     displayD6Roll();
