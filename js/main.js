@@ -32,6 +32,9 @@ function startGame() {
     var player2 = new Player(player2Name);
     var newGame = new Game(player1, player2);
     pigDice.currGame = newGame;
+    getByID("player1-label").innerHTML = player1Name + "'s";
+    getByID("player2-label").innerHTML = player2Name + "'s";
+    getByID("turn-display").innerHTML = player1Name + "'s Turn";
 }
 function endGame() {
     getByID("roll-die").setAttribute("disabled", "disabled");
@@ -53,7 +56,7 @@ function rollD6() {
         pigDice.currGame.currTurnTotal += rollValue;
     }
     displayD6Face(rollValue);
-    getInputByID("current-total").value = pigDice.currGame.currTurnTotal.toString();
+    getInputByID("turn-total").value = pigDice.currGame.currTurnTotal.toString();
 }
 function passTurn() {
     displayD6Idle();
@@ -75,6 +78,7 @@ function switchPlayer() {
     var nextPlayer = pigDice.currGame.nextPlayer;
     pigDice.currGame.currPlayer = nextPlayer;
     pigDice.currGame.nextPlayer = currPlayer;
+    getByID("turn-display").innerHTML = nextPlayer.playerName + "'s Turn";
 }
 function displayD6Face(rollValue) {
     if (rollValue == 6) {

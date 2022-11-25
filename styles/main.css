@@ -18,13 +18,13 @@ header > h1 {
     margin: .5em 0 .2em;
 }
 
-h1, input[type="textbox"] {
+h1, h2, input[type="textbox"] {
     text-align: center;
 }
 
 #page-content {
     display: grid;
-    grid-template-columns: auto;
+    grid-template-columns: 1fr;
 }
 
 #game-rules, #start-game-form, #pig-dice-game, #start-game {
@@ -42,7 +42,7 @@ h1, input[type="textbox"] {
     list-style-type: square;
 }
 
-#player-name-inputs, #game-buttons {
+#player-name-inputs {
     width: fit-content;
     margin: auto;
 }
@@ -53,15 +53,33 @@ input[type="button"], input[type="textbox"] {
     border-radius: .5em;
 }
 
-#player-scores {
-    width: fit-content;
+#game-grid {
+    display: flex; 
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+#game-buttons {
     display: flex;
-    margin: auto;
+    flex-direction: column;
+}
+
+#player-scores {
+    display: flex;
+}
+
+#turn-totals, #game-buttons {
+    margin: 0 auto;
 }
 
 #player1, #player2 {
-    margin: 0 2em;
+    margin: 0 .5em;
     text-align: center;
+}
+
+#turn-display {
+    margin: .5em 0;
+    border-bottom: 2px solid var(--colorSecondary);
 }
 
 input[type="textbox"] {
@@ -85,8 +103,8 @@ input[type="textbox"]::-ms-input-placeholder {
 }
 
 .output-textbox {
-    width: 3.5em;   
-    height: 3.5em;
+    width: 2.5em;   
+    height: 2.5em;
 }
 
 input[type="button"] {
@@ -114,15 +132,10 @@ input[type="button"][disabled] {
     opacity: 0.65;
 }
 
-#roll-die, #pass-turn, .input-textbox {
+.game-button, .input-textbox {
     display: inline-block;
     width: 10em;
     margin: .5em .5em;
-}
-
-#turn-totals {
-    width: fit-content;
-    margin: auto;
 }
 
 #roll-display {

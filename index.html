@@ -31,27 +31,34 @@
             <input type="button" id="start-game" value="Start Game">
         </form>
         <div id="pig-dice-game">
-            <div id="player-scores">
-                <div id="player1">
-                    <label>John's <br> Score</label>
-                    <br>
-                    <input type="textbox" value="0" id="player1-total" class="output-textbox" disabled>
+                <h2 id="turn-display"></h2>
+            <div id="game-grid">
+                <div id="player-scores">
+                    <div id="player1">
+                        <label for="player1-total" id="player1-label"></label>
+                        <br>
+                        <label>Total Score</label>
+                        <br>
+                        <input type="textbox" value="0" id="player1-total" class="output-textbox" disabled>
+                    </div>
+                    <div id="player2">
+                        <label for="player2-total" id="player2-label"></label>
+                        <br>
+                        <label>Total Score</label>
+                        <br>
+                        <input type="textbox" value="0" id="player2-total" class="output-textbox" disabled>
+                    </div>              
                 </div>
-                <div id="player2">
-                    <label>Michael's <br> Score</label>
-                    <br>
-                    <input type="textbox" value="0" id="player2-total" class="output-textbox" disabled>
-                </div>              
-            </div>
-            <div id="turn-totals">
-                <div id="current-roll-display">
-                    <img src="images/dice-icons/d6-idle.svg" id="roll-display">
+                <div id="turn-totals">
+                    <div id="current-roll-display">
+                        <img src="images/dice-icons/d6-idle.svg" id="roll-display">
+                    </div>
+                    <input type="textbox" id="turn-total" class="output-textbox" disabled>
+                </div>        
+                <div id="game-buttons">
+                    <input type="button" id="roll-die" class="game-button" value="Roll Die">
+                    <input type="button" id="pass-turn" class="game-button" value="Pass Turn">
                 </div>
-                <input type="textbox" id="turn-total" class="output-textbox" disabled>
-            </div>        
-            <div id="game-buttons">
-                <input type="button" id="roll-die" value="Roll Die">
-                <input type="button" id="pass-turn" value="Pass Turn">
             </div>
         </div>
     </main>

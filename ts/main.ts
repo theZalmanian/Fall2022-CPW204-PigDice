@@ -103,6 +103,12 @@ function startGame():void{
     // set it as the current game
     pigDice.currGame = newGame;
 
+    getByID("player1-label").innerHTML = player1Name + "'s";
+    getByID("player2-label").innerHTML = player2Name + "'s";
+
+    // display the new current player
+    getByID("turn-display").innerHTML = player1Name + "'s Turn";
+
     // // remove the start game form from the page
     // getByID("page-content").removeChild(getByID("start-game-form"));
 }
@@ -168,7 +174,7 @@ function rollD6():void {
     displayD6Face(rollValue); 
 
     // display current total on page
-    getInputByID("current-total").value = pigDice.currGame.currTurnTotal.toString();
+    getInputByID("turn-total").value = pigDice.currGame.currTurnTotal.toString();
 }
 
 /**
@@ -224,6 +230,9 @@ function switchPlayer():void {
     // swap their positions
     pigDice.currGame.currPlayer = nextPlayer;
     pigDice.currGame.nextPlayer = currPlayer;
+
+    // display the new current player
+    getByID("turn-display").innerHTML = nextPlayer.playerName + "'s Turn";
 }
 
 /*******************
