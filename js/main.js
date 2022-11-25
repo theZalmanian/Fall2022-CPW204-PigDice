@@ -41,6 +41,10 @@ function endGame() {
     getByID("pass-turn").setAttribute("disabled", "disabled");
     getByID("roll-die").classList.add("game-over");
     getByID("pass-turn").classList.add("game-over");
+    var winnerName = pigDice.currGame.currPlayer.playerName;
+    var totalScore = pigDice.currGame.currPlayer.totalScore;
+    var gameOverMessage = winnerName + " has won the game with " + totalScore + " points!";
+    getByID("turn-display").innerText = gameOverMessage;
 }
 function rollDie() {
     displayD6Roll();
@@ -50,7 +54,6 @@ function rollD6() {
     var rollValue = generateNumberWithinRange(1, 6);
     if (rollValue == 1) {
         switchPlayer();
-        resetTurnTotal();
     }
     else {
         pigDice.currGame.currTurnTotal += rollValue;
@@ -69,11 +72,11 @@ function passTurn() {
         endGame();
     }
     else {
-        resetTurnTotal();
         switchPlayer();
     }
 }
 function switchPlayer() {
+    resetTurnTotal();
     var currPlayer = pigDice.currGame.currPlayer;
     var nextPlayer = pigDice.currGame.nextPlayer;
     pigDice.currGame.currPlayer = nextPlayer;

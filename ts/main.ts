@@ -126,9 +126,17 @@ function endGame():void {
     getByID("roll-die").classList.add("game-over");
     getByID("pass-turn").classList.add("game-over");
 
-    // display winner 
-    //getByID("test").innerText = 
-    // pigDice.currGame.currPlayer.playerName + " has won the game!"; 
+    // get the winning players name
+    let winnerName = pigDice.currGame.currPlayer.playerName;
+
+    // get their score
+    let totalScore = pigDice.currGame.currPlayer.totalScore;
+
+    // compose game-over message
+    let gameOverMessage = winnerName + " has won the game with " + totalScore + " points!"
+
+    // display message
+    getByID("turn-display").innerText = gameOverMessage; 
 }
 
 /******************
@@ -159,9 +167,6 @@ function rollD6():void {
     if(rollValue == 1) {
         // switch to the next player
         switchPlayer();
-
-        // reset the current turn total
-        resetTurnTotal();
     }
 
     // if the roll value is not 1
@@ -186,7 +191,7 @@ function rollD6():void {
     // display the d6 at its idle state
     displayD6Idle();
 
-    // get the total score of the current round
+    // get the total score of the current turn
     let turnTotal:number = pigDice.currGame.currTurnTotal;
 
     // add it to the current players total score
@@ -198,7 +203,7 @@ function rollD6():void {
     // grab the current players total textbox
     let currPlayerTextBox = getInputByID(currPlayerName.toLowerCase() + "-total");
 
-    // display the current players total score on page
+    // display the current players total score in their textbox
     currPlayerTextBox.value = pigDice.currGame.currPlayer.totalScore.toString();
 
     // if the current player's total is now 100 or greater
@@ -208,9 +213,6 @@ function rollD6():void {
     } 
     // otherwise swap players
     else {
-        // reset the turn total
-        resetTurnTotal();
-
         // switch to the next player
         switchPlayer();
     }
@@ -221,6 +223,9 @@ function rollD6():void {
  * to the next player in the game
  */
 function switchPlayer():void {
+    // reset the turn total
+    resetTurnTotal();
+    
     // get the player whose turn it is currently
     let currPlayer = pigDice.currGame.currPlayer;
 
@@ -267,8 +272,8 @@ function displayD6Face(rollValue:number):void {
 }
 
 /**
- * Displays an image of a hand throwing up a six-sided die 
- * to simulate a "die roll"
+ * Displays an image of a hand throwing up a 
+ * six-sided die to simulate a "die roll"
  */
 function displayD6Roll():void {
     getImageByID("roll-display").src = "images/dice-icons/d6-roll.svg";
