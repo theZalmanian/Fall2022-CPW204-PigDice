@@ -30,12 +30,7 @@ function startGame() {
     var player2 = new Player(player2Name);
     var newGame = new Game(player1, player2);
     pigDice.currGame = newGame;
-    getByID("player1-label").innerHTML = player1Name + "'s";
-    getByID("player2-label").innerHTML = player2Name + "'s";
-    getByID("turn-display").innerHTML = player1Name + "'s Turn";
-    getByID("start-game-form").innerHTML = "";
-    setTimeout(removeStartForm, 3000);
-    displayPreloader("start-game-form", 3000);
+    delayFunctionCall(removeStartForm, 3000, "start-game-form");
 }
 function removeStartForm() {
     getByID("page-content").removeChild(getByID("start-game-form"));
@@ -57,8 +52,11 @@ function displayPigDiceGame() {
     setupButton("pass-turn", passTurn);
     var player1Name = pigDice.currGame.currPlayer.playerName;
     var player2Name = pigDice.currGame.nextPlayer.playerName;
+    getByID("player1-label").innerText = player1Name + "'s";
+    getByID("player2-label").innerText = player2Name + "'s";
     createTotalTextbox(player1Name.toLowerCase() + "-total", "player1");
     createTotalTextbox(player2Name.toLowerCase() + "-total", "player2");
+    getByID("turn-display").innerHTML = player1Name + "'s Turn";
     getByID("pig-dice-game").style.opacity = "1";
 }
 function createGameButton(buttonID, buttonText) {
@@ -83,8 +81,8 @@ function displayPreloader(createWithin, removeAfter) {
     preloaderContainer.classList.add("lds-ellipsis");
     preloaderContainer.setAttribute("id", "preloader");
     for (var currDiv = 0; currDiv < 4; currDiv++) {
-        var circle = createElement("div");
-        preloaderContainer.appendChild(circle);
+        var square = createElement("div");
+        preloaderContainer.appendChild(square);
     }
     getByID(createWithin).innerHTML = "";
     getByID(createWithin).appendChild(preloaderContainer);
@@ -100,7 +98,7 @@ function rollDie() {
 function rollD6() {
     var rollValue = generateNumberWithinRange(1, 6);
     if (rollValue == 1) {
-        switchPlayer();
+        delayFunctionCall(switchPlayer, 1000, "turn-display");
     }
     else {
         pigDice.currGame.currTurnTotal += rollValue;
@@ -116,11 +114,10 @@ function passTurn() {
     var currPlayerTextBox = getInputByID(currPlayerName.toLowerCase() + "-total");
     currPlayerTextBox.value = pigDice.currGame.currPlayer.totalScore.toString();
     if (pigDice.currGame.currPlayer.totalScore >= 10) {
-        displayPreloader("turn-display", 2000);
-        setTimeout(endGame, 2000);
+        delayFunctionCall(endGame, 2000, "turn-display");
     }
     else {
-        switchPlayer();
+        delayFunctionCall(switchPlayer, 1000, "turn-display");
     }
 }
 function switchPlayer() {
@@ -156,6 +153,10 @@ function displayD6Roll() {
 }
 function displayD6Idle() {
     getImageByID("roll-display").src = "images/dice-icons/d6-idle.svg";
+}
+function delayFunctionCall(callFunction, delayBy, preloaderContainer) {
+    displayPreloader(preloaderContainer, delayBy);
+    setTimeout(callFunction, delayBy);
 }
 function generateNumberWithinRange(min, max) {
     var number = (Math.random() * max) + min;

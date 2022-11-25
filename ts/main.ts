@@ -71,7 +71,7 @@ class PigDice {
 }
 
 window.onload = function():void {
-    // setup onclick event for Start Game button
+    // setup onclick event for the "Start Game" button
     setupButton("start-game", startGame);
 }
 
@@ -102,19 +102,10 @@ function startGame():void{
 
     // set it as the current game
     pigDice.currGame = newGame;
-
-    getByID("player1-label").innerHTML = player1Name + "'s";
-    getByID("player2-label").innerHTML = player2Name + "'s";
-
-    // display the new current player
-    getByID("turn-display").innerHTML = player1Name + "'s Turn";
     
-    // remove the start game form from the page
-    getByID("start-game-form").innerHTML = "";
-    setTimeout(removeStartForm, 3000);
-
-    // display preloader
-    displayPreloader("start-game-form", 3000);
+    // remove the "start game form" from the page
+    // after 3 seconds, and start the game
+    delayFunctionCall(removeStartForm, 3000, "start-game-form");
 }
 
 /**
@@ -174,9 +165,16 @@ function displayPigDiceGame() {
     let player1Name:string = pigDice.currGame.currPlayer.playerName;
     let player2Name:string = pigDice.currGame.nextPlayer.playerName;
 
+    // display their names in the corresponding labels
+    getByID("player1-label").innerText = player1Name + "'s";
+    getByID("player2-label").innerText = player2Name + "'s";
+
     // create their score total textboxes
     createTotalTextbox(player1Name.toLowerCase() + "-total", "player1");
     createTotalTextbox(player2Name.toLowerCase() + "-total", "player2");
+
+    // display the player whose turn it is currently
+    getByID("turn-display").innerHTML = player1Name + "'s Turn";
 
     // make the pig-dice-game div visible
     getByID("pig-dice-game").style.opacity = "1";
@@ -259,10 +257,10 @@ function displayPreloader(createWithin:string, removeAfter:number):void {
 
     for(let currDiv:number = 0; currDiv < 4; currDiv++) {
         // create four more divs
-        let circle = createElement("div");
+        let square = createElement("div");
         
         // and place them in the preloader container
-        preloaderContainer.appendChild(circle);
+        preloaderContainer.appendChild(square);
     }
 
     // empty the element the preloader will be displayed in
@@ -276,7 +274,7 @@ function displayPreloader(createWithin:string, removeAfter:number):void {
 }
 
 /**
- * When called removes the preloader from the page
+ * When called, removes the preloader from the page
  */
 function removePreloader():void {
     // remove the preloader from the page
@@ -309,8 +307,8 @@ function rollD6():void {
 
     // if the roll value is 1
     if(rollValue == 1) {
-        // switch to the next player
-        switchPlayer();
+        // switch to the next player after 1 second
+        delayFunctionCall(switchPlayer, 1000, "turn-display");
     }
 
     // if the roll value is not 1
@@ -352,16 +350,13 @@ function rollD6():void {
 
     // if the current player's total is now 100 or greater
     if(pigDice.currGame.currPlayer.totalScore >= 10) {
-        // display preloader
-        displayPreloader("turn-display", 2000);
-
-        // end the game
-        setTimeout(endGame, 2000);
+        // end game after 2 seconds
+        delayFunctionCall(endGame, 2000, "turn-display");
     } 
     // otherwise swap players
     else {
-        // switch to the next player
-        switchPlayer();
+        // switch to the next player after 1 second
+        delayFunctionCall(switchPlayer, 1000, "turn-display");
     }
 }
 
@@ -436,6 +431,21 @@ function displayD6Idle():void {
 /****************
 **** HELPERS ****
 ****************/
+
+/**
+ * Calls a function after the given interval (in milliseconds) has passed,
+ * and displays the preloader during the delay
+ * @param callFunction The function being called after the specified time
+ * @param delayBy The # of milliseconds the function call is delayed by
+ * @param preloaderContainer The id of the HTML element the preloader is being created in
+ */
+function delayFunctionCall(callFunction:() => void, delayBy:number, preloaderContainer:string):void {
+    // display preloader during delay
+    displayPreloader(preloaderContainer, delayBy);
+
+    // call function after delay
+    setTimeout(callFunction, delayBy);
+}
 
 /**
  * Generates a random number within the given range
