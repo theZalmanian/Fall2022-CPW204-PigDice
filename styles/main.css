@@ -115,7 +115,7 @@ input[type="button"][disabled] {
     border-bottom: 2px solid var(--colorSecondary);
 }
 
-#game-grid {
+#game-info {
     display: flex; 
     flex-direction: row;
     align-items: flex-end;
@@ -148,4 +148,8 @@ input[type="button"][disabled] {
     height: 50px;
     width: 50px;
     transition: all .3s;
+}
+
+.lds-ellipsis div {
+    background: var(--colorSecondary);
 }

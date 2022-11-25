@@ -33,7 +33,8 @@ function startGame() {
     getByID("player1-label").innerHTML = player1Name + "'s";
     getByID("player2-label").innerHTML = player2Name + "'s";
     getByID("turn-display").innerHTML = player1Name + "'s Turn";
-    getByID("start-game-form").innerHTML = "<h1>...<h1>";
+    getByID("start-game-form").innerHTML = "";
+    createLoadingIcon("start-game-form");
     setTimeout(test, 2000);
 }
 function test() {
@@ -41,14 +42,13 @@ function test() {
     createPigDiceGame();
 }
 function endGame() {
-    getByID("roll-die").setAttribute("disabled", "disabled");
-    getByID("pass-turn").setAttribute("disabled", "disabled");
-    getByID("roll-die").classList.add("game-over");
-    getByID("pass-turn").classList.add("game-over");
+    getByID("game-buttons").removeChild(getInputByID("roll-die"));
+    getByID("game-buttons").removeChild(getInputByID("pass-turn"));
     var winnerName = pigDice.currGame.currPlayer.playerName;
     var totalScore = pigDice.currGame.currPlayer.totalScore;
     var gameOverMessage = winnerName + " has won the game with " + totalScore + " points!";
     getByID("turn-display").innerText = gameOverMessage;
+    createGameButton("play-again", "Play Again?");
 }
 function createPigDiceGame() {
     createGameButton("roll-die", "Roll Die");
@@ -71,12 +71,22 @@ function createTotalTextbox(textBoxID, createWithin) {
     getByID(createWithin).appendChild(newTextBox);
 }
 function createInput(inputType, inputID, inputClass, inputText) {
-    var newInput = document.createElement("input");
+    var newInput = createElement("input");
     newInput.setAttribute("type", inputType);
     newInput.setAttribute("id", inputID);
     newInput.classList.add(inputClass);
     newInput.setAttribute("value", inputText);
     return newInput;
+}
+function createLoadingIcon(createWithin) {
+    var loaderContainer = createElement("div");
+    loaderContainer.classList.add("lds-ellipsis");
+    loaderContainer.setAttribute("id", "loader");
+    for (var currDiv = 0; currDiv < 4; currDiv++) {
+        var circle = createElement("div");
+        loaderContainer.appendChild(circle);
+    }
+    getByID(createWithin).appendChild(loaderContainer);
 }
 function rollDie() {
     displayD6Roll();
@@ -161,4 +171,7 @@ function getInputByID(id) {
 }
 function getByID(id) {
     return document.getElementById(id);
+}
+function createElement(type) {
+    return document.createElement(type);
 }

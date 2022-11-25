@@ -110,7 +110,8 @@ function startGame():void{
     getByID("turn-display").innerHTML = player1Name + "'s Turn";
     
     // // remove the start game form from the page
-    getByID("start-game-form").innerHTML = "<h1>...<h1>";
+    getByID("start-game-form").innerHTML = "";
+    createLoadingIcon("start-game-form");
     setTimeout(test, 2000);
 }
 
@@ -124,13 +125,9 @@ function test() {
  * a message to the winner
  */
 function endGame():void {
-    // disable the "Roll Die" and "Pass Turn" buttons
-    getByID("roll-die").setAttribute("disabled", "disabled");
-    getByID("pass-turn").setAttribute("disabled", "disabled");
-
-    // give them the game over class
-    getByID("roll-die").classList.add("game-over");
-    getByID("pass-turn").classList.add("game-over");
+    // remove the "Roll Die" and "Pass Turn" buttons from the page
+    getByID("game-buttons").removeChild(getInputByID("roll-die"));
+    getByID("game-buttons").removeChild(getInputByID("pass-turn"));
 
     // get the winning players name
     let winnerName = pigDice.currGame.currPlayer.playerName;
@@ -143,12 +140,19 @@ function endGame():void {
 
     // display message
     getByID("turn-display").innerText = gameOverMessage; 
+
+    // create and display the "Play Again" button
+    createGameButton("play-again", "Play Again?");
 }
 
 /************************
 **** CREATE ELEMENTS ****
 ************************/
 
+/**
+ * Creates the elements needed to play the pig dice game, 
+ * and makes the game visible when the required elements are created
+ */
 function createPigDiceGame() {
     // create the roll-die button
     createGameButton("roll-die", "Roll Die");
@@ -213,7 +217,7 @@ function createTotalTextbox(textBoxID:string, createWithin:string):void {
  */
 function createInput(inputType:string, inputID:string, inputClass:string, inputText):HTMLInputElement {
     // create an html input element
-    let newInput = <HTMLInputElement> document.createElement("input");
+    let newInput = <HTMLInputElement> createElement("input");
     
     // make it the specified input element
     newInput.setAttribute("type", inputType);
@@ -229,6 +233,33 @@ function createInput(inputType:string, inputID:string, inputClass:string, inputT
 
     // return the input
     return newInput;
+}
+
+/**
+ * Creates a moving loader within the specified element,
+ * and removes it after the specified time
+ * @param createWithin The id of the HTML element the loader is being created in
+ */
+function createLoadingIcon(createWithin:string):void {
+    // create a container div
+    let loaderContainer = createElement("div");
+
+    // give it the lds-ellipsis class
+    loaderContainer.classList.add("lds-ellipsis");
+
+    // give it the loader id
+    loaderContainer.setAttribute("id", "loader");
+
+    for(let currDiv:number = 0; currDiv < 4; currDiv++) {
+        // create four more divs
+        let circle = createElement("div");
+        
+        // and place them in the loader container
+        loaderContainer.appendChild(circle);
+    }
+
+    // place the loader container within the specified element
+    getByID(createWithin).appendChild(loaderContainer);
 }
 
 /******************
@@ -443,4 +474,13 @@ function getInputByID(id:string):HTMLInputElement {
  */
 function getByID(id:string):HTMLElement {
     return document.getElementById(id);
+}
+
+/**
+ * Shortened form of the document.createElement method
+ * @param type The type of element being created
+ * @returns The newly created HTML Element
+ */
+ function createElement(type:string):HTMLElement {
+    return document.createElement(type);
 }
