@@ -27,7 +27,8 @@ h1, h2, input[type="textbox"] {
     grid-template-columns: 1fr;
 }
 
-#game-rules, #start-game-form, #pig-dice-game, #start-game {
+#game-rules, #start-game-form, 
+#pig-dice-game, #start-game {
     width: 30em;
     padding: .5em 1em;
     border: 3px solid var(--colorSecondary);
@@ -48,38 +49,9 @@ h1, h2, input[type="textbox"] {
 }
 
 #game-rules, #start-game-form, #pig-dice-game,
-input[type="button"], input[type="textbox"] {
+input[type="textbox"], input[type="button"] {
     margin: .75em auto;
     border-radius: .5em;
-}
-
-#game-grid {
-    display: flex; 
-    flex-direction: row;
-    align-items: flex-end;
-}
-
-#game-buttons {
-    display: flex;
-    flex-direction: column;
-}
-
-#player-scores {
-    display: flex;
-}
-
-#turn-totals, #game-buttons {
-    margin: 0 auto;
-}
-
-#player1, #player2 {
-    margin: 0 .5em;
-    text-align: center;
-}
-
-#turn-display {
-    margin: .5em 0;
-    border-bottom: 2px solid var(--colorSecondary);
 }
 
 input[type="textbox"] {
@@ -94,17 +66,18 @@ input[type="textbox"] {
     height: 2em;
 }
 
+.input-textbox, .game-button {
+    display: inline-block;
+    width: 10em;
+    margin: .5em .5em;
+}
+
 input[type="textbox"]::placeholder {
     color: var(--colorBackground);
 }
 
 input[type="textbox"]::-ms-input-placeholder {
     color: var(--colorBackground);
-}
-
-.output-textbox {
-    width: 2.5em;   
-    height: 2.5em;
 }
 
 input[type="button"] {
@@ -132,10 +105,38 @@ input[type="button"][disabled] {
     opacity: 0.65;
 }
 
-.game-button, .input-textbox {
-    display: inline-block;
-    width: 10em;
-    margin: .5em .5em;
+#turn-display {
+    margin: .5em 0;
+    border-bottom: 2px solid var(--colorSecondary);
+}
+
+#game-grid {
+    display: flex; 
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+#player-scores {
+    display: flex;
+}
+
+#player1, #player2 {
+    margin: 0 .5em;
+    text-align: center;
+}
+
+.output-textbox {
+    width: 2.5em;   
+    height: 2.5em;
+}
+
+#turn-totals, #game-buttons {
+    margin: 0 auto;
+}
+
+#game-buttons {
+    display: flex;
+    flex-direction: column;
 }
 
 #roll-display {
