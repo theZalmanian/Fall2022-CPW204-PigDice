@@ -122,6 +122,9 @@ function removeStartForm():void {
  * a message to the winner
  */
 function endGame():void {
+    // display the d6 at its idle state
+    displayD6Idle();
+
     // remove the "Roll Die" and "Pass Turn" buttons from the page
     getByID("game-buttons").removeChild(getInputByID("roll-die"));
     getByID("game-buttons").removeChild(getInputByID("pass-turn"));
@@ -140,6 +143,9 @@ function endGame():void {
 
     // create and display the "Play Again" button
     createGameButton("play-again", "Play Again?");
+
+    // give it an onclick event
+    // setupButton("play-again", playAgain);
 }
 
 /************************
@@ -307,12 +313,18 @@ function rollD6():void {
 
     // if the roll value is 1
     if(rollValue == 1) {
+        // reset the turn total
+        resetTurnTotal();
+
+        // disable the game buttons
+        disableGameButtons();
+
         // switch to the next player after 1 second
-        delayFunctionCall(switchPlayer, 1000, "turn-display");
+        delayFunctionCall(switchPlayer, 2000, "turn-display");
     }
 
     // if the roll value is not 1
-    else {
+    if(rollValue != 1) {
         // add roll value to turn total
         pigDice.currGame.currTurnTotal += rollValue;
     }
@@ -330,9 +342,6 @@ function rollD6():void {
  * and then passes the turn on to the next player
  */
  function passTurn():void {
-    // display the d6 at its idle state
-    displayD6Idle();
-
     // get the total score of the current turn
     let turnTotal:number = pigDice.currGame.currTurnTotal;
 
@@ -350,13 +359,26 @@ function rollD6():void {
 
     // if the current player's total is now 100 or greater
     if(pigDice.currGame.currPlayer.totalScore >= 10) {
+        // reset the turn total
+        resetTurnTotal();
+
+        // disable the game buttons
+        disableGameButtons();
+
         // end game after 2 seconds
         delayFunctionCall(endGame, 2000, "turn-display");
     } 
+
     // otherwise swap players
     else {
+        // reset the turn total
+        resetTurnTotal();
+
+        // disable the game buttons
+        disableGameButtons();
+
         // switch to the next player after 1 second
-        delayFunctionCall(switchPlayer, 1000, "turn-display");
+        delayFunctionCall(switchPlayer, 2000, "turn-display");
     }
 }
 
@@ -365,9 +387,6 @@ function rollD6():void {
  * to the next player in the game
  */
 function switchPlayer():void {
-    // reset the turn total
-    resetTurnTotal();
-    
     // get the player whose turn it is currently
     let currPlayer = pigDice.currGame.currPlayer;
 
@@ -380,6 +399,12 @@ function switchPlayer():void {
 
     // display the new current player
     getByID("turn-display").innerHTML = nextPlayer.playerName + "'s Turn";
+
+    // enable the game buttons
+    enableGameButtons();
+
+    // display the d6 at its idle state
+    displayD6Idle();
 }
 
 /*******************
@@ -431,6 +456,25 @@ function displayD6Idle():void {
 /****************
 **** HELPERS ****
 ****************/
+
+/**
+ * When called disables the "Roll Die" and "Pass Turn" buttons
+ */
+function disableGameButtons():void {
+    // disable both game buttons
+    getInputByID("roll-die").setAttribute("disabled", "disabled");
+    getInputByID("pass-turn").setAttribute("disabled", "disabled");
+}
+
+/**
+ * When called removes the disabled property from the 
+ * "Roll Die" and "Pass Turn" buttons
+ */
+function enableGameButtons():void {
+    // enable both game buttons
+    getInputByID("roll-die").removeAttribute("disabled");
+    getInputByID("pass-turn").removeAttribute("disabled");
+}
 
 /**
  * Calls a function after the given interval (in milliseconds) has passed,

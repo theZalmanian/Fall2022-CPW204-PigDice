@@ -44,6 +44,7 @@ h1, h3, input[type="textbox"] {
 }
 
 #player-name-inputs {
+    display: flex;
     width: fit-content;
     margin: auto;
 }
@@ -62,14 +63,8 @@ input[type="textbox"] {
 }
 
 .input-textbox {
-    width: 10.5em;   
+    width: 10em;   
     height: 2em;
-}
-
-.input-textbox, .game-button {
-    display: inline-block;
-    width: 10em;
-    margin: .5em .5em;
 }
 
 input[type="textbox"]::placeholder {
@@ -144,6 +139,12 @@ input[type="button"][disabled] {
     flex-direction: column;
 }
 
+.game-button {
+    display: inline-block;
+    width: 10em;
+    margin: .5em .5em;
+}
+
 #roll-display {
     height: 50px;
     width: 50px;
@@ -151,5 +152,6 @@ input[type="button"][disabled] {
 }
 
 .lds-ellipsis div {
-    background: var(--colorSecondary);
+    background: #ffa800;
+    border: 1px solid black;
 }

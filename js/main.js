@@ -37,6 +37,7 @@ function removeStartForm() {
     displayPigDiceGame();
 }
 function endGame() {
+    displayD6Idle();
     getByID("game-buttons").removeChild(getInputByID("roll-die"));
     getByID("game-buttons").removeChild(getInputByID("pass-turn"));
     var winnerName = pigDice.currGame.currPlayer.playerName;
@@ -98,35 +99,41 @@ function rollDie() {
 function rollD6() {
     var rollValue = generateNumberWithinRange(1, 6);
     if (rollValue == 1) {
-        delayFunctionCall(switchPlayer, 1000, "turn-display");
+        resetTurnTotal();
+        disableGameButtons();
+        delayFunctionCall(switchPlayer, 2000, "turn-display");
     }
-    else {
+    if (rollValue != 1) {
         pigDice.currGame.currTurnTotal += rollValue;
     }
     displayD6Face(rollValue);
     getInputByID("turn-total").value = pigDice.currGame.currTurnTotal.toString();
 }
 function passTurn() {
-    displayD6Idle();
     var turnTotal = pigDice.currGame.currTurnTotal;
     pigDice.currGame.currPlayer.totalScore += turnTotal;
     var currPlayerName = pigDice.currGame.currPlayer.playerName;
     var currPlayerTextBox = getInputByID(currPlayerName.toLowerCase() + "-total");
     currPlayerTextBox.value = pigDice.currGame.currPlayer.totalScore.toString();
     if (pigDice.currGame.currPlayer.totalScore >= 10) {
+        resetTurnTotal();
+        disableGameButtons();
         delayFunctionCall(endGame, 2000, "turn-display");
     }
     else {
-        delayFunctionCall(switchPlayer, 1000, "turn-display");
+        resetTurnTotal();
+        disableGameButtons();
+        delayFunctionCall(switchPlayer, 2000, "turn-display");
     }
 }
 function switchPlayer() {
-    resetTurnTotal();
     var currPlayer = pigDice.currGame.currPlayer;
     var nextPlayer = pigDice.currGame.nextPlayer;
     pigDice.currGame.currPlayer = nextPlayer;
     pigDice.currGame.nextPlayer = currPlayer;
     getByID("turn-display").innerHTML = nextPlayer.playerName + "'s Turn";
+    enableGameButtons();
+    displayD6Idle();
 }
 function displayD6Face(rollValue) {
     if (rollValue == 6) {
@@ -153,6 +160,14 @@ function displayD6Roll() {
 }
 function displayD6Idle() {
     getImageByID("roll-display").src = "images/dice-icons/d6-idle.svg";
+}
+function disableGameButtons() {
+    getInputByID("roll-die").setAttribute("disabled", "disabled");
+    getInputByID("pass-turn").setAttribute("disabled", "disabled");
+}
+function enableGameButtons() {
+    getInputByID("roll-die").removeAttribute("disabled");
+    getInputByID("pass-turn").removeAttribute("disabled");
 }
 function delayFunctionCall(callFunction, delayBy, preloaderContainer) {
     displayPreloader(preloaderContainer, delayBy);
