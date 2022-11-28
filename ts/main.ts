@@ -114,7 +114,11 @@ function startGame():void{
  */
 function removeStartForm():void {
     getByID("page-content").removeChild(getByID("start-game-form"));
-    displayPigDiceGame();
+    createPigDiceGame();
+}
+
+function removePigDiceGame():void {
+    getByID("page-content").removeChild(getByID("pig-dice-game"));
 }
 
 /**
@@ -142,107 +146,277 @@ function endGame():void {
     getByID("turn-display").innerText = gameOverMessage; 
 
     // create and display the "Play Again" button
-    createGameButton("play-again", "Play Again?");
+    createGameButton("play-again", "game-buttons", "Play Again?");
 
     // give it an onclick event
-    // setupButton("play-again", playAgain);
+    setupButton("play-again", playAgain);
 }
 
 /************************
 **** CREATE ELEMENTS ****
 ************************/
 
+function playAgain() {
+    // remove the game
+    delayFunctionCall(removePigDiceGame, 3000, "pig-dice-game");
+
+    // create the start game form
+    delayFunctionCall(createStartGameForm, 3000, "pig-dice-game");
+}
+
+/**
+ * Creates the Start Game form and displays it on the page
+ */
+function createStartGameForm():void {
+    // create the start game form
+    let startGameForm = createElementWithID("form", "start-game-form");
+
+    // add it to the page
+    getByID("page-content").appendChild(startGameForm);
+
+    // create both input textboxes within the form
+    createInputTextBox("player1-name", "start-game-form", "Player1 Name");
+    createInputTextBox("player2-name", "start-game-form", "Player2 Name");
+
+    // create the "Start Game" button after the textboxes
+    createGameButton("start-game", "start-game-form", "Start Game");
+
+    // setup the "Start Game" button's onclick
+    setupButton("start-game", startGame);
+}
+ 
 /**
  * Creates the elements needed to play the pig dice game, 
  * and makes the game visible when the required elements are created
  */
-function displayPigDiceGame() {
-    // create the roll-die button
-    createGameButton("roll-die", "Roll Die");
+function createPigDiceGame():void {
+    // create the pig dice game container div
+    let gameContainerDiv = createElementWithID("div", "pig-dice-game");
+    
+    // add it to the page
+    getByID("page-content").appendChild(gameContainerDiv);
 
-    // create the pass-turn button
-    createGameButton("pass-turn", "Pass Turn");
+    // create the turn display h3
+    let turnDisplayH3 = createElementWithID("h3", "turn-display");
 
-    // set up their on-click events
-    setupButton("roll-die", rollDie);
-    setupButton("pass-turn", passTurn);
+    // add it to the container
+    gameContainerDiv.appendChild(turnDisplayH3);
 
+    // display the player whose turn it is currently
+    getByID("turn-display").innerHTML = pigDice.currGame.currPlayer.playerName + "'s Turn";
+
+    // create the game info div
+    createGameInfoDiv();
+}
+
+/**
+ * Creates a player's score display using their name,
+ * and displays it in the game-info div
+ * @param whichPlayer The player the display belongs to (player1 or player2)
+ * @param playerName The name of the player the display belongs to
+ */
+function createScoreDisplay(whichPlayer:string, playerName:string):void {
+    // create the score container div
+    let scoreContainer:HTMLElement = createElementWithID("div", whichPlayer);
+
+    // create the name display label
+    let nameDisplay:HTMLElement = createElementWithID("label", whichPlayer + "-label");
+
+    // assign it to the player's score total textbox
+    nameDisplay.setAttribute("for", playerName.toLowerCase() + "-total");
+
+    // display the player's name
+    nameDisplay.innerText = playerName + "'s";
+
+    // create a <br> element
+    let break1:HTMLElement = createElement("br");
+
+    // create the total score label
+    let totalScoreLabel:HTMLElement = createElement("label");
+
+    // set it's text
+    totalScoreLabel.innerText = "Total Score";
+
+    // create another <br> element
+    let break2:HTMLElement = createElement("br");
+
+    // assemble the player's score display
+    getByID("player-scores").appendChild(scoreContainer);
+    scoreContainer.appendChild(nameDisplay);
+    scoreContainer.appendChild(break1);
+    scoreContainer.appendChild(totalScoreLabel);
+    scoreContainer.appendChild(break2);
+
+    // create and display their score total textbox
+    // at the bottom of the score display
+    createOutputTextBox(playerName.toLowerCase() + "-total", whichPlayer);
+}
+
+function createGameInfoDiv():void {
+    // create the game info div
+    let gameInfo = createElementWithID("div", "game-info");
+
+    // add it to the container
+    getByID("pig-dice-game").appendChild(gameInfo);
+
+    // create the player scores, turn totals, and game button divs
+    createPlayerScoresDiv();
+    createTurnTotalsDiv();
+    createGameButtonsDiv();
+}
+
+function createPlayerScoresDiv():void {
     // get player1 and player2's names
     let player1Name:string = pigDice.currGame.currPlayer.playerName;
     let player2Name:string = pigDice.currGame.nextPlayer.playerName;
 
-    // display their names in the corresponding labels
-    getByID("player1-label").innerText = player1Name + "'s";
-    getByID("player2-label").innerText = player2Name + "'s";
+    // create the Player Scores div
+    let playerScores = createElementWithID("div", "player-scores");
 
-    // create their score total textboxes
-    createTotalTextbox(player1Name.toLowerCase() + "-total", "player1");
-    createTotalTextbox(player2Name.toLowerCase() + "-total", "player2");
+    // add it to the game info div
+    getByID("game-info").appendChild(playerScores);
 
-    // display the player whose turn it is currently
-    getByID("turn-display").innerHTML = player1Name + "'s Turn";
+    // create the score display for both players
+    createScoreDisplay("player1", player1Name);
+    createScoreDisplay("player2", player2Name);
+}
 
-    // make the pig-dice-game div visible
-    getByID("pig-dice-game").style.opacity = "1";
+function createTurnTotalsDiv():void {
+    // create the Turn Totals div
+    let turnTotals = createElementWithID("div", "turn-totals");
+
+    // add it to the game info div
+    getByID("game-info").appendChild(turnTotals);
+
+    // create the current roll display image
+    let currentRollImage = createElementWithID("img", "roll-display");
+
+    // add it to the turn totals div
+    turnTotals.appendChild(currentRollImage);
+
+    // link to the die at it's idle state
+    displayD6Idle();
+
+    // create the turn total textbox
+    createOutputTextBox("turn-total", "turn-totals");
+}
+
+function createGameButtonsDiv():void {
+    let gameButtonsContainer = createElementWithID("div", "game-buttons");
+
+    // add it to the game info div
+    getByID("game-info").appendChild(gameButtonsContainer);
+
+    // create the "Roll Die" button
+    createGameButton("roll-die", "game-buttons", "Roll Die");
+
+    // create the "Pass Turn" button
+    createGameButton("pass-turn", "game-buttons", "Pass Turn");
+
+    // set up their on-click events
+    setupButton("roll-die", rollDie);
+    setupButton("pass-turn", passTurn);
 }
 
 /**
- * Creates a "game" button with the given id,
- * and places the given text within it
+ * Creates a game button with the given id,
+ * places the given text within it,
+ * and creates it within the given element
  * @param buttonID The id being given to the button
- * @param buttonText The text being displayed in the button
+ * @param createWithin The id of the HTML Element the button is being created in
+ * @param buttonText The text being displayed within the button
  */
-function createGameButton(buttonID:string, buttonText:string):void {
-    // create a game button with the given data
-    let newButton:HTMLInputElement = createInput("button", buttonID, "game-button", buttonText);
+function createGameButton(buttonID:string, createWithin:string, buttonText:string):void {
+    // create a button with the given id
+    let newButton:HTMLInputElement = createInputWithID("button", buttonID);
 
-    // add it into the game-buttons div
-    getByID("game-buttons").appendChild(newButton);
+    // give it the game button class
+    newButton.classList.add("game-button");
+
+    // place the given text within it
+    newButton.setAttribute("value", buttonText);
+
+    // create it within the given element
+    getByID(createWithin).appendChild(newButton);
 }
 
 /**
- * Creates a "score total" textbox with the given id,
- * and places it within the given div
+ * Creates an output textbox with the given id,
+ * and creates it within the given element
  * @param textBoxID The id being given to the textbox
- * @param createWithin The id of the HTML element the textbox is being created in
+ * @param createWithin The id of the HTML Element the textbox is being created in
  */
-function createTotalTextbox(textBoxID:string, createWithin:string):void {
-    // create a total textbox with the given data
-    let newTextBox = createInput("textbox", textBoxID, "output-textbox", "0");
+function createOutputTextBox(textBoxID:string, createWithin:string):void {
+    // create an output textbox with the given id
+    let outputTextBox:HTMLInputElement = createInputWithID("textbox", textBoxID);
+
+    // give it the output class
+    outputTextBox.classList.add("output-textbox");
 
     // disable the textbox
-    newTextBox.setAttribute("disabled", "disabled");
+    outputTextBox.setAttribute("disabled", "disabled");
 
-    // add it into the given div
-    getByID(createWithin).appendChild(newTextBox);
+    // display a zero inside it
+    outputTextBox.setAttribute("value", "0");
+
+    // create it within the given element
+    getByID(createWithin).appendChild(outputTextBox);
 }
 
 /**
- * Creates and returns an HTML Input Element with the given attributes
+ * Creates an input textbox with the given id, 
+ * places the given placeholder text within it,
+ * and creates it within the given element
+ * @param textBoxID The id being given to the textbox
+ * @param createWithin The id of the HTML Element the textbox is being created in
+ * @param placeholder The placeholder text being displayed within the textbox
+ */
+function createInputTextBox(textBoxID:string, createWithin:string, placeholder:string):void {
+    // create an input textbox with the given id
+    let inputTextBox:HTMLInputElement = createInputWithID("textbox", textBoxID);
+
+    // give it the input class
+    inputTextBox.classList.add("input-textbox");
+
+    // display the given placeholder text
+    inputTextBox.setAttribute("placeholder", placeholder);
+
+    // create it within the given element
+    getByID(createWithin).appendChild(inputTextBox);
+}
+
+/**
+ * Creates and returns an HTML Input Element with the given id
  * @param inputType The input element's type, such as textbox or button
  * @param inputID The id being given to the element
- * @param inputClass The class being given to the element
- * @param inputText The text being placed within the element
  * @returns The newly created HTML Input Element
  */
-function createInput(inputType:string, inputID:string, inputClass:string, inputText):HTMLInputElement {
-    // create an html input element
-    let newInput = <HTMLInputElement> createElement("input");
+function createInputWithID(inputType:string, inputID:string):HTMLInputElement {
+    // create an html input element with the given id
+    let newInput = <HTMLInputElement> createElementWithID("input", inputID); 
     
     // make it the specified input element
     newInput.setAttribute("type", inputType);
 
-    // give it the specified id
-    newInput.setAttribute("id", inputID);
-
-    // give it the specified class
-    newInput.classList.add(inputClass);
-
-    // place the specified text within it
-    newInput.setAttribute("value", inputText);
-
-    // return the input
+    // return the newly created input element
     return newInput;
+}
+
+/**
+ * Creates and returns an HTML Element with the given id
+ * @param elementType The element's type, such as div or form
+ * @param elementID The id being given to the element
+ * @returns The newly created HTML Element
+ */
+ function createElementWithID(elementType:string, elementID:string):HTMLElement {
+    // create the specified element
+    let newElement:HTMLElement = createElement(elementType);
+
+    // give it the specified id
+    newElement.setAttribute("id", elementID);
+
+    // return the newly created element
+    return newElement;
 }
 
 /**
@@ -523,7 +697,10 @@ function resetTurnTotal():void {
  * @param useFunction The function to be called when button is clicked
  */
 function setupButton(id:string, useFunction:() => void):void {
+    // get the button
     let button:HTMLElement = getByID(id);
+
+    // set it's onclick event
     button.onclick = useFunction;
 }
 
@@ -561,4 +738,14 @@ function getByID(id:string):HTMLElement {
  */
  function createElement(type:string):HTMLElement {
     return document.createElement(type);
+}
+
+/**
+ * When called, removes the specified element from 
+ * within the given element
+ * @param elementID The id of the element being removed
+ * @param parentID The id of the parent element the element is being removed from
+ */
+function removeElement(elementID:string, parentID:string):void {
+    getByID(parentID).removeChild(getByID(elementID));
 }

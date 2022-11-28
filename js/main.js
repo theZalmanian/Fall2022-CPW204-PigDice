@@ -34,7 +34,10 @@ function startGame() {
 }
 function removeStartForm() {
     getByID("page-content").removeChild(getByID("start-game-form"));
-    displayPigDiceGame();
+    createPigDiceGame();
+}
+function removePigDiceGame() {
+    getByID("page-content").removeChild(getByID("pig-dice-game"));
 }
 function endGame() {
     displayD6Idle();
@@ -44,38 +47,104 @@ function endGame() {
     var totalScore = pigDice.currGame.currPlayer.totalScore;
     var gameOverMessage = winnerName + " has won the game with " + totalScore + " points!";
     getByID("turn-display").innerText = gameOverMessage;
-    createGameButton("play-again", "Play Again?");
+    createGameButton("play-again", "game-buttons", "Play Again?");
+    setupButton("play-again", playAgain);
 }
-function displayPigDiceGame() {
-    createGameButton("roll-die", "Roll Die");
-    createGameButton("pass-turn", "Pass Turn");
-    setupButton("roll-die", rollDie);
-    setupButton("pass-turn", passTurn);
+function playAgain() {
+    delayFunctionCall(removePigDiceGame, 3000, "pig-dice-game");
+    delayFunctionCall(createStartGameForm, 3000, "pig-dice-game");
+}
+function createStartGameForm() {
+    var startGameForm = createElementWithID("form", "start-game-form");
+    getByID("page-content").appendChild(startGameForm);
+    createInputTextBox("player1-name", "start-game-form", "Player1 Name");
+    createInputTextBox("player2-name", "start-game-form", "Player2 Name");
+    createGameButton("start-game", "start-game-form", "Start Game");
+    setupButton("start-game", startGame);
+}
+function createPigDiceGame() {
+    var gameContainerDiv = createElementWithID("div", "pig-dice-game");
+    getByID("page-content").appendChild(gameContainerDiv);
+    var turnDisplayH3 = createElementWithID("h3", "turn-display");
+    gameContainerDiv.appendChild(turnDisplayH3);
+    getByID("turn-display").innerHTML = pigDice.currGame.currPlayer.playerName + "'s Turn";
+    createGameInfoDiv();
+}
+function createScoreDisplay(whichPlayer, playerName) {
+    var scoreContainer = createElementWithID("div", whichPlayer);
+    var nameDisplay = createElementWithID("label", whichPlayer + "-label");
+    nameDisplay.setAttribute("for", playerName.toLowerCase() + "-total");
+    nameDisplay.innerText = playerName + "'s";
+    var break1 = createElement("br");
+    var totalScoreLabel = createElement("label");
+    totalScoreLabel.innerText = "Total Score";
+    var break2 = createElement("br");
+    getByID("player-scores").appendChild(scoreContainer);
+    scoreContainer.appendChild(nameDisplay);
+    scoreContainer.appendChild(break1);
+    scoreContainer.appendChild(totalScoreLabel);
+    scoreContainer.appendChild(break2);
+    createOutputTextBox(playerName.toLowerCase() + "-total", whichPlayer);
+}
+function createGameInfoDiv() {
+    var gameInfo = createElementWithID("div", "game-info");
+    getByID("pig-dice-game").appendChild(gameInfo);
+    createPlayerScoresDiv();
+    createTurnTotalsDiv();
+    createGameButtonsDiv();
+}
+function createPlayerScoresDiv() {
     var player1Name = pigDice.currGame.currPlayer.playerName;
     var player2Name = pigDice.currGame.nextPlayer.playerName;
-    getByID("player1-label").innerText = player1Name + "'s";
-    getByID("player2-label").innerText = player2Name + "'s";
-    createTotalTextbox(player1Name.toLowerCase() + "-total", "player1");
-    createTotalTextbox(player2Name.toLowerCase() + "-total", "player2");
-    getByID("turn-display").innerHTML = player1Name + "'s Turn";
-    getByID("pig-dice-game").style.opacity = "1";
+    var playerScores = createElementWithID("div", "player-scores");
+    getByID("game-info").appendChild(playerScores);
+    createScoreDisplay("player1", player1Name);
+    createScoreDisplay("player2", player2Name);
 }
-function createGameButton(buttonID, buttonText) {
-    var newButton = createInput("button", buttonID, "game-button", buttonText);
-    getByID("game-buttons").appendChild(newButton);
+function createTurnTotalsDiv() {
+    var turnTotals = createElementWithID("div", "turn-totals");
+    getByID("game-info").appendChild(turnTotals);
+    var currentRollImage = createElementWithID("img", "roll-display");
+    turnTotals.appendChild(currentRollImage);
+    displayD6Idle();
+    createOutputTextBox("turn-total", "turn-totals");
 }
-function createTotalTextbox(textBoxID, createWithin) {
-    var newTextBox = createInput("textbox", textBoxID, "output-textbox", "0");
-    newTextBox.setAttribute("disabled", "disabled");
-    getByID(createWithin).appendChild(newTextBox);
+function createGameButtonsDiv() {
+    var gameButtonsContainer = createElementWithID("div", "game-buttons");
+    getByID("game-info").appendChild(gameButtonsContainer);
+    createGameButton("roll-die", "game-buttons", "Roll Die");
+    createGameButton("pass-turn", "game-buttons", "Pass Turn");
+    setupButton("roll-die", rollDie);
+    setupButton("pass-turn", passTurn);
 }
-function createInput(inputType, inputID, inputClass, inputText) {
-    var newInput = createElement("input");
+function createGameButton(buttonID, createWithin, buttonText) {
+    var newButton = createInputWithID("button", buttonID);
+    newButton.classList.add("game-button");
+    newButton.setAttribute("value", buttonText);
+    getByID(createWithin).appendChild(newButton);
+}
+function createOutputTextBox(textBoxID, createWithin) {
+    var outputTextBox = createInputWithID("textbox", textBoxID);
+    outputTextBox.classList.add("output-textbox");
+    outputTextBox.setAttribute("disabled", "disabled");
+    outputTextBox.setAttribute("value", "0");
+    getByID(createWithin).appendChild(outputTextBox);
+}
+function createInputTextBox(textBoxID, createWithin, placeholder) {
+    var inputTextBox = createInputWithID("textbox", textBoxID);
+    inputTextBox.classList.add("input-textbox");
+    inputTextBox.setAttribute("placeholder", placeholder);
+    getByID(createWithin).appendChild(inputTextBox);
+}
+function createInputWithID(inputType, inputID) {
+    var newInput = createElementWithID("input", inputID);
     newInput.setAttribute("type", inputType);
-    newInput.setAttribute("id", inputID);
-    newInput.classList.add(inputClass);
-    newInput.setAttribute("value", inputText);
     return newInput;
+}
+function createElementWithID(elementType, elementID) {
+    var newElement = createElement(elementType);
+    newElement.setAttribute("id", elementID);
+    return newElement;
 }
 function displayPreloader(createWithin, removeAfter) {
     var preloaderContainer = createElement("div");
@@ -196,4 +265,7 @@ function getByID(id) {
 }
 function createElement(type) {
     return document.createElement(type);
+}
+function removeElement(elementID, parentID) {
+    getByID(parentID).removeChild(getByID(elementID));
 }
