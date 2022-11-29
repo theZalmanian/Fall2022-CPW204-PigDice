@@ -30,9 +30,14 @@ h1, h3, input[type="textbox"] {
 }
 
 #game-rules, #start-game-form, 
-#pig-dice-game, #start-game {
+#display-errors, #pig-dice-game, 
+#start-game {
     width: 30em;
     padding: .5em 1em;
+}
+
+#game-rules, #start-game-form,
+#pig-dice-game, #start-game {
     border: 3px solid var(--colorSecondary);
 }
 
@@ -43,10 +48,6 @@ h1, h3, input[type="textbox"] {
 
 #rules-list > li {
     list-style-type: square;
-}
-
-#display-errors {
-    width: fit-content;
 }
 
 #error-list {
@@ -93,7 +94,7 @@ input[type="textbox"]::-ms-input-placeholder {
 
 input[type="button"] {
     padding: .5em .5em;
-    margin: .5em 0;
+    margin: .5em;
     display: block;
     background: none;
     color: var(--colorPrimary);
@@ -143,16 +144,13 @@ input[type="button"][disabled] {
 }
 
 #turn-display, #game-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 0 auto;
 }
 
-#turn-display, #game-buttons {
-    display: flex;
-    flex-direction: column;
-}
-
 .game-button {
-    display: inline-block;
     width: 10em;
     margin: .5em .5em;
 }
@@ -166,4 +164,24 @@ input[type="button"][disabled] {
 .lds-ellipsis div {
     background: #ffa800;
     border: 1px solid black;
+}
+
+/* for smaller devices */
+@media only screen and (max-width: 540px) {
+    #game-rules, #start-game-form, #display-errors, 
+    #pig-dice-game, #start-game {
+        width: 18em;
+    }
+
+    #game-info {
+        flex-wrap: wrap;
+    }
+
+    #game-buttons {
+        flex-direction: row;
+    }
+
+    .game-button {
+        margin: 0 12em;
+    }
 }
