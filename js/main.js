@@ -24,13 +24,15 @@ window.onload = function () {
 };
 var pigDice = new PigDice;
 function startGame() {
-    var player1Name = getInputByID("player1-name").value;
-    var player2Name = getInputByID("player2-name").value;
-    var player1 = new Player(player1Name);
-    var player2 = new Player(player2Name);
-    var newGame = new Game(player1, player2);
-    pigDice.currGame = newGame;
-    delayFunctionCall(removeStartForm, 3000, "start-game-form");
+    if (playerNamesValid()) {
+        var player1Name = getInputByID("player1-name").value.trim();
+        var player2Name = getInputByID("player2-name").value.trim();
+        var player1 = new Player(player1Name);
+        var player2 = new Player(player2Name);
+        var newGame = new Game(player1, player2);
+        pigDice.currGame = newGame;
+        delayFunctionCall(removeStartForm, 3000, "start-game-form");
+    }
 }
 function endGame() {
     displayD6Idle();
@@ -156,11 +158,16 @@ function createElement(elementType) {
 }
 function removeStartForm() {
     removeElement("start-game-form", "page-content");
+    removeErrorDisplay();
     displayPigDiceGame();
+}
+function removeErrorDisplay() {
+    removeElement("error-display", "page-content");
 }
 function removePigDiceGame() {
     removeElement("pig-dice-game", "page-content");
     displayStartGameForm();
+    createErrorDisplay();
 }
 function removePreloader() {
     getByID("preloader").remove();
@@ -232,6 +239,57 @@ function displayD6Roll() {
 function displayD6Idle() {
     getImageByID("roll-display").src = "images/dice-icons/d6-idle.svg";
 }
+function playerNamesValid() {
+    clearAllErrors();
+    var namesAreValid = true;
+    var player1Name = getInputByID("player1-name").value.trim();
+    var player2Name = getInputByID("player2-name").value.trim();
+    if (!isNameValid("player1-name", "player1", player1Name)) {
+        namesAreValid = false;
+    }
+    if (!isNameValid("player2-name", "player2", player2Name)) {
+        namesAreValid = false;
+    }
+    if (namesAreValid && player1Name.toLowerCase() == player2Name.toLowerCase()) {
+        displayError("You cannot use the same name for both players!");
+        namesAreValid = false;
+    }
+    return namesAreValid;
+}
+function isNameValid(textBoxID, whichPlayer, playerName) {
+    if (isInputEmpty(textBoxID)) {
+        displayError("You must enter a name for " + whichPlayer + "!");
+        return false;
+    }
+    if (playerName.length > 10) {
+        displayError(whichPlayer + "'s name may only be a max of 10 characters in length");
+        return false;
+    }
+    return true;
+}
+function isInputEmpty(inputID) {
+    var userInput = getInputByID(inputID).value;
+    if (userInput.trim() == "") {
+        return true;
+    }
+    return false;
+}
+function createErrorDisplay() {
+    var errorDisplay = createElementWithID("div", "display-errors");
+    getByID("page-content").appendChild(errorDisplay);
+    var errorsList = createElementWithID("ul", "error-list");
+    errorDisplay.appendChild(errorsList);
+}
+function displayError(errorMessage) {
+    var errorContainer = createElement("li");
+    errorContainer.innerText = errorMessage;
+    var errorList = getByID("error-list");
+    errorList.appendChild(errorContainer);
+}
+function clearAllErrors() {
+    var errorList = getByID("error-list");
+    errorList.innerText = "";
+}
 function turnSwap() {
     resetTurnTotal();
     disableGameButtons();
@@ -256,18 +314,18 @@ function resetTurnTotal() {
     pigDice.currGame.currTurnTotal = 0;
     getInputByID("turn-total").value = "0";
 }
-function setupButton(id, useFunction) {
-    var button = getByID(id);
+function setupButton(buttonID, useFunction) {
+    var button = getByID(buttonID);
     button.onclick = useFunction;
 }
-function getImageByID(id) {
-    return getByID(id);
+function getImageByID(imageID) {
+    return getByID(imageID);
 }
-function getInputByID(id) {
-    return getByID(id);
+function getInputByID(inputID) {
+    return getByID(inputID);
 }
-function getByID(id) {
-    return document.getElementById(id);
+function getByID(elementID) {
+    return document.getElementById(elementID);
 }
 function removeElement(elementID, parentID) {
     getByID(parentID).removeChild(getByID(elementID));

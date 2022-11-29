@@ -86,25 +86,29 @@ let pigDice:PigDice = new PigDice;
 
 /**
  * When the "Start Game" button is clicked- creates a new "Pig Dice" game
+ * as long as both player names are valid
  */
 function startGame():void{ 
-    // get both player's names from their respective inputs
-    let player1Name:string = getInputByID("player1-name").value;
-    let player2Name:string = getInputByID("player2-name").value;
-
-    // create a player object for each player
-    let player1:Player = new Player(player1Name);
-    let player2:Player = new Player(player2Name);
-
-    // create a new instance of pig dice game
-    let newGame:Game = new Game(player1, player2);
-
-    // set it as the current game
-    pigDice.currGame = newGame;
+    // if both player names are valid
+    if(playerNamesValid()) {
+        // get both player's names from their respective inputs
+        let player1Name:string = getInputByID("player1-name").value.trim();
+        let player2Name:string = getInputByID("player2-name").value.trim();
     
-    // remove the "start game" form from the page
-    // after 3 seconds, and start the game
-    delayFunctionCall(removeStartForm, 3000, "start-game-form");
+        // create a player object for each player
+        let player1:Player = new Player(player1Name);
+        let player2:Player = new Player(player2Name);
+    
+        // create a new instance of pig dice game
+        let newGame:Game = new Game(player1, player2);
+    
+        // set it as the current game
+        pigDice.currGame = newGame;
+        
+        // remove the "start game" form from the page
+        // after 3 seconds, and start the game
+        delayFunctionCall(removeStartForm, 3000, "start-game-form");
+    }
 }
 
 /**
@@ -424,9 +428,9 @@ function displayPreloader(createWithin:string, removeAfter:number):void {
     setTimeout(removePreloader, removeAfter);
 }
 
-/***********************
-**** CREATE HELPERS ****
-***********************/
+/*************************
+**** CREATE - HELPERS ****
+*************************/
 
 /**
  * Creates and returns an HTML Input Element with the given id
@@ -482,9 +486,20 @@ function createElement(elementType:string):HTMLElement {
 function removeStartForm():void {
     // remove the "start game" form from the page
     removeElement("start-game-form", "page-content");
+
+    // remove the error display div from the page
+    removeErrorDisplay();
     
     // create and display the pig dice game
     displayPigDiceGame();
+}
+
+/**
+ * When called, removes the "error display" div from the page
+ */
+function removeErrorDisplay() {
+    // remove the error display from the page
+    removeElement("error-display", "page-content");
 }
 
 /**
@@ -498,6 +513,9 @@ function removePigDiceGame():void {
 
     // create and display the "start game" form
     displayStartGameForm();
+
+    // create and display the error display div
+    createErrorDisplay();
 }
 
 /**
@@ -658,6 +676,138 @@ function displayD6Idle():void {
     getImageByID("roll-display").src = "images/dice-icons/d6-idle.svg";
 }
 
+/*******************
+**** VALIDATION ****
+*******************/
+
+/**
+ * Check's if both player name's have been entered, and are valid,
+ * and returns true or false accordingly
+ * @returns True if both names are valid; otherwise False
+ */
+function playerNamesValid():boolean {
+    // clear previous errors, if any
+    clearAllErrors();
+
+    // setup flag
+    let namesAreValid:boolean = true;
+
+    // get both player's names
+    let player1Name:string = getInputByID("player1-name").value.trim();
+    let player2Name:string = getInputByID("player2-name").value.trim();
+
+    // check that both player names are valid
+    if(!isNameValid("player1-name", "player1", player1Name)) {
+        namesAreValid = false;
+    }
+    
+    if(!isNameValid("player2-name", "player2", player2Name)) {
+        namesAreValid = false;
+    }
+
+    // check that both player names are not the same
+    if(namesAreValid && player1Name.toLowerCase() == player2Name.toLowerCase()) {
+        displayError("You cannot use the same name for both players!");
+        namesAreValid = false;
+    }
+
+    return namesAreValid;
+}
+
+/**
+ * Checks if a player name the user entered is valid, and returns
+ * true or false correspondingly
+ * @param textBoxID The id of the textbox being checked
+ * @param whichPlayer The player the textbox belongs to (player1 or player2)
+ * @param playerName The name the user entered for that player
+ * @returns True if name is valid; otherwise False
+ */
+function isNameValid(textBoxID:string, whichPlayer:string, playerName:string):boolean {
+    // check if the user entered a name
+    if(isInputEmpty(textBoxID)) {
+        displayError("You must enter a name for " + whichPlayer + "!");
+        return false;
+    }
+
+    // check if the name is under 10 characters in length
+    if(playerName.length > 10) {
+        displayError(whichPlayer + "'s name may only be a max of 10 characters in length");
+        return false;
+    }
+    
+    // if name is valid
+    return true;
+}
+
+/**
+ * Checks if input is empty, and returns true or false correspondingly
+ * @param inputID The id of the input being checked
+ * @returns True if input is empty; otherwise False
+ */
+ function isInputEmpty(inputID:string):boolean {
+    // get value from textbox
+    let userInput:string = getInputByID(inputID).value;
+    
+    // check if input is empty
+    if(userInput.trim() == "") {
+        return true;
+    }
+    
+    // if textbox contains text
+    return false;
+}
+
+/***************
+**** ERRORS ****
+***************/
+
+/**
+ * Creates the error display div, and adds it 
+ * under the "start game" form on the page
+ */
+function createErrorDisplay() {
+    // create the error display div
+    let errorDisplay = createElementWithID("div", "display-errors");
+
+    // add it to the page
+    getByID("page-content").appendChild(errorDisplay);
+
+    // create the error-list ul
+    let errorsList = createElementWithID("ul", "error-list");
+
+    // add it to the container 
+    errorDisplay.appendChild(errorsList);
+}
+
+/**
+ * Displays the given error message in the "error display" div
+ * @param errorMessage The error message being displayed
+ */
+ function displayError(errorMessage:string):void {
+    // create an li to hold the error message
+    let errorContainer:HTMLElement = createElement("li");
+
+    // place error message within it
+    errorContainer.innerText = errorMessage;
+
+    // grab the ul where errors are displayed
+    let errorList:HTMLElement = getByID("error-list");
+
+    // place the new li within it
+    errorList.appendChild(errorContainer);
+}
+
+/**
+ * Clears out all errors displayed on the form when called
+ */
+ function clearAllErrors():void {
+    // grab the ul where errors are displayed
+    let errorList:HTMLElement = getByID("error-list");
+
+    // clear it of all errors
+    errorList.innerText = "";
+}
+
 /****************
 **** HELPERS ****
 ****************/
@@ -736,12 +886,12 @@ function resetTurnTotal():void {
 
 /**
  * Sets up an onclick event for a button
- * @param id The button's id
+ * @param buttonID The button's id
  * @param useFunction The function to be called when button is clicked
  */
-function setupButton(id:string, useFunction:() => void):void {
+function setupButton(buttonID:string, useFunction:() => void):void {
     // get the button
-    let button:HTMLElement = getByID(id);
+    let button:HTMLElement = getByID(buttonID);
 
     // set it's onclick event
     button.onclick = useFunction;
@@ -749,29 +899,29 @@ function setupButton(id:string, useFunction:() => void):void {
 
 /**
  * Gets an HTML Image Element by it's ID
- * @param id - The image's id
+ * @param imageID - The image's id
  * @returns The corresponding HTML Image Element
  */
-function getImageByID(id:string):HTMLImageElement {
-    return <HTMLImageElement> getByID(id);
+function getImageByID(imageID:string):HTMLImageElement {
+    return <HTMLImageElement> getByID(imageID);
 }
 
 /**
  * Gets an HTML Input Element by it's ID
- * @param id The input's id
+ * @param inputID The input's id
  * @returns The corresponding HTML Input Element
  */
-function getInputByID(id:string):HTMLInputElement {
-    return <HTMLInputElement> getByID(id);
+function getInputByID(inputID:string):HTMLInputElement {
+    return <HTMLInputElement> getByID(inputID);
 }
 
 /**
  * Shortened form of the document.getElementById method
- * @param id The element's id
+ * @param elementID The element's id
  * @returns The corresponding HTML Element
  */
-function getByID(id:string):HTMLElement {
-    return document.getElementById(id);
+function getByID(elementID:string):HTMLElement {
+    return document.getElementById(elementID);
 }
 
 /**
