@@ -172,31 +172,29 @@ function rollDie() {
 function rollD6() {
     var rollValue = generateNumberWithinRange(1, 6);
     if (rollValue == 1) {
-        resetTurnTotal();
-        disableGameButtons();
         delayFunctionCall(switchPlayer, 2000, "curr-player-display");
+        turnSwap();
     }
     if (rollValue != 1) {
         pigDice.currGame.currTurnTotal += rollValue;
     }
     displayD6Face(rollValue);
-    getInputByID("turn-total").value = pigDice.currGame.currTurnTotal.toString();
+    var currTotal = pigDice.currGame.currTurnTotal.toString();
+    getInputByID("turn-total").value = currTotal;
 }
 function passTurn() {
     var turnTotal = pigDice.currGame.currTurnTotal;
     pigDice.currGame.currPlayer.totalScore += turnTotal;
-    var currPlayerName = pigDice.currGame.currPlayer.playerName;
-    var currPlayerTextBox = getInputByID(currPlayerName.toLowerCase() + "-total");
-    currPlayerTextBox.value = pigDice.currGame.currPlayer.totalScore.toString();
+    var playerName = pigDice.currGame.currPlayer.playerName;
+    var currTotal = pigDice.currGame.currPlayer.totalScore.toString();
+    getInputByID(playerName.toLowerCase() + "-total").value = currTotal;
     if (pigDice.currGame.currPlayer.totalScore >= 10) {
-        resetTurnTotal();
-        disableGameButtons();
         delayFunctionCall(endGame, 2000, "curr-player-display");
+        turnSwap();
     }
     else {
-        resetTurnTotal();
-        disableGameButtons();
         delayFunctionCall(switchPlayer, 2000, "curr-player-display");
+        turnSwap();
     }
 }
 function switchPlayer() {
@@ -233,6 +231,10 @@ function displayD6Roll() {
 }
 function displayD6Idle() {
     getImageByID("roll-display").src = "images/dice-icons/d6-idle.svg";
+}
+function turnSwap() {
+    resetTurnTotal();
+    disableGameButtons();
 }
 function disableGameButtons() {
     getInputByID("roll-die").setAttribute("disabled", "disabled");

@@ -534,31 +534,27 @@ function rollD6():void {
 
     // if the roll value is 1
     if(rollValue == 1) {
-        // reset the turn total
-        resetTurnTotal();
-
-        // disable the game buttons
-        disableGameButtons();
-
         // switch to the next player after 2 seconds
         delayFunctionCall(switchPlayer, 2000, "curr-player-display");
+        turnSwap();
     }
 
     // if the roll value is not 1
     if(rollValue != 1) {
-        // add roll value to turn total
+        // add the rolled value to the turn total
         pigDice.currGame.currTurnTotal += rollValue;
     }
 
     // display roll value
     displayD6Face(rollValue); 
 
-    // display current total on page
-    getInputByID("turn-total").value = pigDice.currGame.currTurnTotal.toString();
+    // get and display the current total on page
+    let currTotal:string = pigDice.currGame.currTurnTotal.toString();
+    getInputByID("turn-total").value = currTotal;
 }
 
 /**
- * When a player clicks the "Pass Turn" button or rolls a 1, 
+ * When a player clicks the "Pass Turn" button-
  * adds the current turn total to that player's total score,
  * and then passes the turn on to the next player
  */
@@ -570,41 +566,29 @@ function passTurn():void {
     pigDice.currGame.currPlayer.totalScore += turnTotal;
 
     // get the current players name
-    let currPlayerName:string = pigDice.currGame.currPlayer.playerName;
+    let playerName:string = pigDice.currGame.currPlayer.playerName;
 
-    // grab the current players total textbox
-    let currPlayerTextBox = getInputByID(currPlayerName.toLowerCase() + "-total");
-
-    // display the current players total score in their textbox
-    currPlayerTextBox.value = pigDice.currGame.currPlayer.totalScore.toString();
+    // get and display the current players total score in their textbox
+    let currTotal:string = pigDice.currGame.currPlayer.totalScore.toString();
+    getInputByID(playerName.toLowerCase() + "-total").value = currTotal;
 
     // if the current player's total is now 100 or greater
     if(pigDice.currGame.currPlayer.totalScore >= 10) {
-        // reset the turn total
-        resetTurnTotal();
-
-        // disable the game buttons
-        disableGameButtons();
-
         // end game after 2 seconds
         delayFunctionCall(endGame, 2000, "curr-player-display");
+        turnSwap();
     } 
 
     // otherwise swap players
     else {
-        // reset the turn total
-        resetTurnTotal();
-
-        // disable the game buttons
-        disableGameButtons();
-
-        // switch to the next player after 1 second
+        // switch to the next player after 2 second
         delayFunctionCall(switchPlayer, 2000, "curr-player-display");
+        turnSwap();
     }
 }
 
 /**
- * When called, changes the player whose turn it is currently
+ * When called- changes the player whose turn it is currently
  * to the next player in the game
  */
 function switchPlayer():void {
@@ -618,7 +602,7 @@ function switchPlayer():void {
     pigDice.currGame.currPlayer = nextPlayer;
     pigDice.currGame.nextPlayer = currPlayer;
 
-    // display the new current player
+    // display the new current player's name
     getByID("curr-player-display").innerHTML = nextPlayer.playerName + "'s Turn";
 
     // enable the game buttons
@@ -677,6 +661,18 @@ function displayD6Idle():void {
 /****************
 **** HELPERS ****
 ****************/
+
+/**
+ * When called resets the turn total and disables
+ * the "Roll Die" and "Pass Turn" buttons
+ */
+function turnSwap():void {
+    // reset the turn total
+    resetTurnTotal();
+
+    // disable the game buttons
+    disableGameButtons();
+}
 
 /**
  * When called disables the "Roll Die" and "Pass Turn" buttons
