@@ -215,26 +215,44 @@ function switchPlayer() {
 }
 function displayD6Face(rollValue) {
     if (rollValue == 6) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-6.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/6.svg";
     }
     else if (rollValue == 5) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-5.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/5.svg";
     }
     else if (rollValue == 4) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-4.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/4.svg";
     }
     else if (rollValue == 3) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-3.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/3.svg";
     }
     else if (rollValue == 2) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-2.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/2.svg";
     }
     else if (rollValue == 1) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-1.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/1.svg";
     }
 }
 function displayD6Roll() {
-    getImageByID("roll-display").src = "images/dice-icons/d6-roll.svg";
+    var randomNum = generateNumberWithinRange(1, 6);
+    if (randomNum == 6) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/6.svg";
+    }
+    else if (randomNum == 5) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/5.svg";
+    }
+    else if (randomNum == 4) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/4.svg";
+    }
+    else if (randomNum == 3) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/3.svg";
+    }
+    else if (randomNum == 2) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/2.svg";
+    }
+    else if (randomNum == 1) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/1.svg";
+    }
 }
 function displayD6Idle() {
     getImageByID("roll-display").src = "images/dice-icons/d6-idle.svg";

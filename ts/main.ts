@@ -640,33 +640,55 @@ function switchPlayer():void {
  * @param rollValue The value the six-sided die landed on
  */
 function displayD6Face(rollValue:number):void {   
-    // Based on the rolled value, display the corresponding image
+    // based on the rolled value, display the corresponding image
     if(rollValue == 6) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-6.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/6.svg";
     }
     else if(rollValue == 5) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-5.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/5.svg";
     }
     else if(rollValue == 4) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-4.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/4.svg";
     }
     else if(rollValue == 3) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-3.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/3.svg";
     }
     else if(rollValue == 2) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-2.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/2.svg";
     }
     else if(rollValue == 1) {
-        getImageByID("roll-display").src = "images/dice-icons/d6-side-1.svg";
+        getImageByID("roll-display").src = "images/dice-icons/d6-side/1.svg";
     }
 }
 
 /**
  * Displays an image of a hand throwing up a 
- * six-sided die to simulate a "die roll"
+ * six-sided die to simulate a "die roll".
+ * There are 6 variations, 1 for each die face
  */
 function displayD6Roll():void {
-    getImageByID("roll-display").src = "images/dice-icons/d6-roll.svg";
+    // generate a random number between 1 and 6
+    let randomNum:number = generateNumberWithinRange(1, 6); 
+
+    // based on the rolled value, display the corresponding image
+    if(randomNum == 6) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/6.svg";
+    }
+    else if(randomNum == 5) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/5.svg";
+    }
+    else if(randomNum == 4) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/4.svg";
+    }
+    else if(randomNum == 3) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/3.svg";
+    }
+    else if(randomNum == 2) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/2.svg";
+    }
+    else if(randomNum == 1) {
+        getImageByID("roll-display").src = "images/dice-icons/d6-roll/1.svg";
+    }
 }
 
 /**
