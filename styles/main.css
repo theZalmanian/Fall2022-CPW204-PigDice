@@ -101,7 +101,7 @@ input[type="button"][disabled] {
     opacity: 0.65;
 }
 
-#turn-display {
+#curr-player-display {
     padding-bottom: .2em;
     margin: .5em 0;
     border-bottom: 2px solid var(--colorSecondary);
@@ -127,16 +127,11 @@ input[type="button"][disabled] {
     height: 2.5em;
 }
 
-#turn-totals, #game-buttons {
+#turn-display, #game-buttons {
     margin: 0 auto;
 }
 
-#turn-totals {
-    display: flex;
-    flex-direction: column;
-}
-
-#game-buttons {
+#turn-display, #game-buttons {
     display: flex;
     flex-direction: column;
 }

@@ -32,29 +32,21 @@ function startGame() {
     pigDice.currGame = newGame;
     delayFunctionCall(removeStartForm, 3000, "start-game-form");
 }
-function removeStartForm() {
-    getByID("page-content").removeChild(getByID("start-game-form"));
-    createPigDiceGame();
-}
-function removePigDiceGame() {
-    getByID("page-content").removeChild(getByID("pig-dice-game"));
-}
 function endGame() {
     displayD6Idle();
-    getByID("game-buttons").removeChild(getInputByID("roll-die"));
-    getByID("game-buttons").removeChild(getInputByID("pass-turn"));
     var winnerName = pigDice.currGame.currPlayer.playerName;
     var totalScore = pigDice.currGame.currPlayer.totalScore;
     var gameOverMessage = winnerName + " has won the game with " + totalScore + " points!";
-    getByID("turn-display").innerText = gameOverMessage;
+    getByID("curr-player-display").innerText = gameOverMessage;
+    getByID("game-buttons").removeChild(getInputByID("roll-die"));
+    getByID("game-buttons").removeChild(getInputByID("pass-turn"));
     createGameButton("play-again", "game-buttons", "Play Again?");
     setupButton("play-again", playAgain);
 }
 function playAgain() {
     delayFunctionCall(removePigDiceGame, 3000, "pig-dice-game");
-    delayFunctionCall(createStartGameForm, 3000, "pig-dice-game");
 }
-function createStartGameForm() {
+function displayStartGameForm() {
     var startGameForm = createElementWithID("form", "start-game-form");
     getByID("page-content").appendChild(startGameForm);
     createInputTextBox("player1-name", "start-game-form", "Player1 Name");
@@ -62,35 +54,20 @@ function createStartGameForm() {
     createGameButton("start-game", "start-game-form", "Start Game");
     setupButton("start-game", startGame);
 }
-function createPigDiceGame() {
-    var gameContainerDiv = createElementWithID("div", "pig-dice-game");
-    getByID("page-content").appendChild(gameContainerDiv);
-    var turnDisplayH3 = createElementWithID("h3", "turn-display");
-    gameContainerDiv.appendChild(turnDisplayH3);
-    getByID("turn-display").innerHTML = pigDice.currGame.currPlayer.playerName + "'s Turn";
+function displayPigDiceGame() {
+    var gameContainer = createElementWithID("div", "pig-dice-game");
+    getByID("page-content").appendChild(gameContainer);
+    var playerDisplay = createElementWithID("h3", "curr-player-display");
+    gameContainer.appendChild(playerDisplay);
+    var player1Name = pigDice.currGame.currPlayer.playerName;
+    playerDisplay.innerHTML = player1Name + "'s Turn";
     createGameInfoDiv();
-}
-function createScoreDisplay(whichPlayer, playerName) {
-    var scoreContainer = createElementWithID("div", whichPlayer);
-    var nameDisplay = createElementWithID("label", whichPlayer + "-label");
-    nameDisplay.setAttribute("for", playerName.toLowerCase() + "-total");
-    nameDisplay.innerText = playerName + "'s";
-    var break1 = createElement("br");
-    var totalScoreLabel = createElement("label");
-    totalScoreLabel.innerText = "Total Score";
-    var break2 = createElement("br");
-    getByID("player-scores").appendChild(scoreContainer);
-    scoreContainer.appendChild(nameDisplay);
-    scoreContainer.appendChild(break1);
-    scoreContainer.appendChild(totalScoreLabel);
-    scoreContainer.appendChild(break2);
-    createOutputTextBox(playerName.toLowerCase() + "-total", whichPlayer);
 }
 function createGameInfoDiv() {
     var gameInfo = createElementWithID("div", "game-info");
     getByID("pig-dice-game").appendChild(gameInfo);
     createPlayerScoresDiv();
-    createTurnTotalsDiv();
+    createTurnDisplayDiv();
     createGameButtonsDiv();
 }
 function createPlayerScoresDiv() {
@@ -101,17 +78,33 @@ function createPlayerScoresDiv() {
     createScoreDisplay("player1", player1Name);
     createScoreDisplay("player2", player2Name);
 }
-function createTurnTotalsDiv() {
-    var turnTotals = createElementWithID("div", "turn-totals");
-    getByID("game-info").appendChild(turnTotals);
+function createScoreDisplay(whichPlayer, playerName) {
+    var scoreContainer = createElementWithID("div", whichPlayer);
+    getByID("player-scores").appendChild(scoreContainer);
+    var nameDisplay = createElementWithID("label", whichPlayer + "-label");
+    nameDisplay.setAttribute("for", playerName.toLowerCase() + "-total");
+    var totalScoreLabel = createElement("label");
+    var br1 = createElement("br");
+    var br2 = createElement("br");
+    scoreContainer.appendChild(nameDisplay);
+    scoreContainer.appendChild(br1);
+    scoreContainer.appendChild(totalScoreLabel);
+    scoreContainer.appendChild(br2);
+    nameDisplay.innerText = playerName + "'s";
+    totalScoreLabel.innerText = "Total Score";
+    createOutputTextBox(playerName.toLowerCase() + "-total", whichPlayer);
+}
+function createTurnDisplayDiv() {
+    var turnDisplay = createElementWithID("div", "turn-display");
+    getByID("game-info").appendChild(turnDisplay);
     var currentRollImage = createElementWithID("img", "roll-display");
-    turnTotals.appendChild(currentRollImage);
+    turnDisplay.appendChild(currentRollImage);
     displayD6Idle();
-    createOutputTextBox("turn-total", "turn-totals");
+    createOutputTextBox("turn-total", "turn-display");
 }
 function createGameButtonsDiv() {
-    var gameButtonsContainer = createElementWithID("div", "game-buttons");
-    getByID("game-info").appendChild(gameButtonsContainer);
+    var gameButtons = createElementWithID("div", "game-buttons");
+    getByID("game-info").appendChild(gameButtons);
     createGameButton("roll-die", "game-buttons", "Roll Die");
     createGameButton("pass-turn", "game-buttons", "Pass Turn");
     setupButton("roll-die", rollDie);
@@ -136,16 +129,6 @@ function createInputTextBox(textBoxID, createWithin, placeholder) {
     inputTextBox.setAttribute("placeholder", placeholder);
     getByID(createWithin).appendChild(inputTextBox);
 }
-function createInputWithID(inputType, inputID) {
-    var newInput = createElementWithID("input", inputID);
-    newInput.setAttribute("type", inputType);
-    return newInput;
-}
-function createElementWithID(elementType, elementID) {
-    var newElement = createElement(elementType);
-    newElement.setAttribute("id", elementID);
-    return newElement;
-}
 function displayPreloader(createWithin, removeAfter) {
     var preloaderContainer = createElement("div");
     preloaderContainer.classList.add("lds-ellipsis");
@@ -157,6 +140,27 @@ function displayPreloader(createWithin, removeAfter) {
     getByID(createWithin).innerHTML = "";
     getByID(createWithin).appendChild(preloaderContainer);
     setTimeout(removePreloader, removeAfter);
+}
+function createInputWithID(inputType, inputID) {
+    var newInput = createElementWithID("input", inputID);
+    newInput.setAttribute("type", inputType);
+    return newInput;
+}
+function createElementWithID(elementType, elementID) {
+    var newElement = createElement(elementType);
+    newElement.setAttribute("id", elementID);
+    return newElement;
+}
+function createElement(elementType) {
+    return document.createElement(elementType);
+}
+function removeStartForm() {
+    removeElement("start-game-form", "page-content");
+    displayPigDiceGame();
+}
+function removePigDiceGame() {
+    removeElement("pig-dice-game", "page-content");
+    displayStartGameForm();
 }
 function removePreloader() {
     getByID("preloader").remove();
@@ -170,7 +174,7 @@ function rollD6() {
     if (rollValue == 1) {
         resetTurnTotal();
         disableGameButtons();
-        delayFunctionCall(switchPlayer, 2000, "turn-display");
+        delayFunctionCall(switchPlayer, 2000, "curr-player-display");
     }
     if (rollValue != 1) {
         pigDice.currGame.currTurnTotal += rollValue;
@@ -187,12 +191,12 @@ function passTurn() {
     if (pigDice.currGame.currPlayer.totalScore >= 10) {
         resetTurnTotal();
         disableGameButtons();
-        delayFunctionCall(endGame, 2000, "turn-display");
+        delayFunctionCall(endGame, 2000, "curr-player-display");
     }
     else {
         resetTurnTotal();
         disableGameButtons();
-        delayFunctionCall(switchPlayer, 2000, "turn-display");
+        delayFunctionCall(switchPlayer, 2000, "curr-player-display");
     }
 }
 function switchPlayer() {
@@ -200,7 +204,7 @@ function switchPlayer() {
     var nextPlayer = pigDice.currGame.nextPlayer;
     pigDice.currGame.currPlayer = nextPlayer;
     pigDice.currGame.nextPlayer = currPlayer;
-    getByID("turn-display").innerHTML = nextPlayer.playerName + "'s Turn";
+    getByID("curr-player-display").innerHTML = nextPlayer.playerName + "'s Turn";
     enableGameButtons();
     displayD6Idle();
 }
@@ -262,9 +266,6 @@ function getInputByID(id) {
 }
 function getByID(id) {
     return document.getElementById(id);
-}
-function createElement(type) {
-    return document.createElement(type);
 }
 function removeElement(elementID, parentID) {
     getByID(parentID).removeChild(getByID(elementID));
