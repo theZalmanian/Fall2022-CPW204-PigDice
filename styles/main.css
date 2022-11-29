@@ -48,6 +48,7 @@ h1, h3, input[type="textbox"] {
 
 #rules-list > li {
     list-style-type: square;
+    margin-bottom: .2em;
 }
 
 #error-list {
@@ -171,6 +172,11 @@ input[type="button"][disabled] {
     #game-rules, #start-game-form, #display-errors, 
     #pig-dice-game, #start-game {
         width: 18em;
+    }
+
+    #rules-list {
+        padding-left: .7em;
+        margin: .3em;
     }
 
     #game-info {
