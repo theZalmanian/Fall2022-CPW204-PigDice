@@ -31,7 +31,7 @@ function startGame() {
         var player2 = new Player(player2Name);
         var newGame = new Game(player1, player2);
         pigDice.currGame = newGame;
-        delayFunctionCall(removeStartForm, 3000, "start-game-form");
+        delayFunctionCall(removeStartForm, 2000, "start-game-form");
     }
 }
 function endGame() {
@@ -46,7 +46,7 @@ function endGame() {
     setupButton("play-again", playAgain);
 }
 function playAgain() {
-    delayFunctionCall(removePigDiceGame, 3000, "pig-dice-game");
+    delayFunctionCall(removePigDiceGame, 2000, "pig-dice-game");
 }
 function displayStartGameForm() {
     var startGameForm = createElementWithID("form", "start-game-form");
@@ -179,7 +179,7 @@ function rollDie() {
 function rollD6() {
     var rollValue = generateNumberWithinRange(1, 6);
     if (rollValue == 1) {
-        delayFunctionCall(switchPlayer, 2000, "curr-player-display");
+        delayFunctionCall(switchPlayer, 1500, "curr-player-display");
         turnSwap();
     }
     if (rollValue != 1) {
@@ -195,12 +195,12 @@ function passTurn() {
     var playerName = pigDice.currGame.currPlayer.playerName;
     var currTotal = pigDice.currGame.currPlayer.totalScore.toString();
     getInputByID(playerName.toLowerCase() + "-total").value = currTotal;
-    if (pigDice.currGame.currPlayer.totalScore >= 10) {
-        delayFunctionCall(endGame, 2000, "curr-player-display");
+    if (pigDice.currGame.currPlayer.totalScore >= 100) {
+        delayFunctionCall(endGame, 1000, "curr-player-display");
         turnSwap();
     }
     else {
-        delayFunctionCall(switchPlayer, 2000, "curr-player-display");
+        delayFunctionCall(switchPlayer, 1000, "curr-player-display");
         turnSwap();
     }
 }

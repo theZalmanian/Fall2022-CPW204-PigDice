@@ -106,8 +106,8 @@ function startGame():void{
         pigDice.currGame = newGame;
         
         // remove the "start game" form from the page
-        // after 3 seconds, and start the game
-        delayFunctionCall(removeStartForm, 3000, "start-game-form");
+        // after 2 seconds, and start the game
+        delayFunctionCall(removeStartForm, 2000, "start-game-form");
     }
 }
 
@@ -154,8 +154,8 @@ function endGame():void {
  */
 function playAgain():void {
     // remove the pig-dice-game form from the page
-    // after 3 seconds, and display the "Start Game" form
-    delayFunctionCall(removePigDiceGame, 3000, "pig-dice-game");
+    // after 2 seconds, and display the "Start Game" form
+    delayFunctionCall(removePigDiceGame, 2000, "pig-dice-game");
 }
 
 /**
@@ -552,8 +552,8 @@ function rollD6():void {
 
     // if the roll value is 1
     if(rollValue == 1) {
-        // switch to the next player after 2 seconds
-        delayFunctionCall(switchPlayer, 2000, "curr-player-display");
+        // switch to the next player after 1.5 second
+        delayFunctionCall(switchPlayer, 1500, "curr-player-display");
         turnSwap();
     }
 
@@ -591,16 +591,16 @@ function passTurn():void {
     getInputByID(playerName.toLowerCase() + "-total").value = currTotal;
 
     // if the current player's total is now 100 or greater
-    if(pigDice.currGame.currPlayer.totalScore >= 10) {
-        // end game after 2 seconds
-        delayFunctionCall(endGame, 2000, "curr-player-display");
+    if(pigDice.currGame.currPlayer.totalScore >= 100) {
+        // end game after 1 second
+        delayFunctionCall(endGame, 1000, "curr-player-display");
         turnSwap();
     } 
 
     // otherwise swap players
     else {
-        // switch to the next player after 2 second
-        delayFunctionCall(switchPlayer, 2000, "curr-player-display");
+        // switch to the next player after 1 second
+        delayFunctionCall(switchPlayer, 1000, "curr-player-display");
         turnSwap();
     }
 }
