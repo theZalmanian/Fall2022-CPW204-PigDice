@@ -707,7 +707,7 @@ function playerNamesValid():boolean {
 
     // check that both player names are not the same
     if(namesAreValid && player1Name.toLowerCase() == player2Name.toLowerCase()) {
-        displayError("You cannot use the same name for both players");
+        displayError("Both player's may not have the same name");
         namesAreValid = false;
     }
 
@@ -731,7 +731,7 @@ function isNameValid(textBoxID:string, whichPlayer:string, playerName:string):bo
 
     // check if the name is under 10 characters in length
     if(playerName.length > 10) {
-        displayError(whichPlayer + "'s name may only be a max of 10 characters in length");
+        displayError("A name can have a max of 10 characters");
         return false;
     }
     

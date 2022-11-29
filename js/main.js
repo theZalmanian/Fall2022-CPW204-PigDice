@@ -251,7 +251,7 @@ function playerNamesValid() {
         namesAreValid = false;
     }
     if (namesAreValid && player1Name.toLowerCase() == player2Name.toLowerCase()) {
-        displayError("You cannot use the same name for both players");
+        displayError("Both player's may not have the same name");
         namesAreValid = false;
     }
     return namesAreValid;
@@ -262,7 +262,7 @@ function isNameValid(textBoxID, whichPlayer, playerName) {
         return false;
     }
     if (playerName.length > 10) {
-        displayError(whichPlayer + "'s name may only be a max of 10 characters in length");
+        displayError("A name can have a max of 10 characters");
         return false;
     }
     return true;
