@@ -157,8 +157,8 @@ function createElement(elementType) {
     return document.createElement(elementType);
 }
 function removeStartForm() {
-    removeElement("start-game-form", "page-content");
     removeErrorDisplay();
+    removeElement("start-game-form", "page-content");
     displayPigDiceGame();
 }
 function removeErrorDisplay() {
@@ -275,7 +275,7 @@ function isInputEmpty(inputID) {
     return false;
 }
 function createErrorDisplay() {
-    var errorDisplay = createElementWithID("div", "display-errors");
+    var errorDisplay = createElementWithID("div", "error-display");
     getByID("page-content").appendChild(errorDisplay);
     var errorsList = createElementWithID("ul", "error-list");
     errorDisplay.appendChild(errorsList);

@@ -484,11 +484,11 @@ function createElement(elementType:string):HTMLElement {
  * and then creates and displays the pig-dice-game in it's place
  */
 function removeStartForm():void {
-    // remove the "start game" form from the page
-    removeElement("start-game-form", "page-content");
-
     // remove the error display div from the page
     removeErrorDisplay();
+
+    // remove the "start game" form from the page
+    removeElement("start-game-form", "page-content");
     
     // create and display the pig dice game
     displayPigDiceGame();
@@ -767,7 +767,7 @@ function isNameValid(textBoxID:string, whichPlayer:string, playerName:string):bo
  */
 function createErrorDisplay() {
     // create the error display div
-    let errorDisplay = createElementWithID("div", "display-errors");
+    let errorDisplay = createElementWithID("div", "error-display");
 
     // add it to the page
     getByID("page-content").appendChild(errorDisplay);
