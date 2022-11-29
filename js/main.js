@@ -10,7 +10,6 @@ var Game = (function () {
         this.currPlayer = currPlayer;
         this.nextPlayer = nextPlayer;
         this.currTurnTotal = 0;
-        this.isGameOver = false;
     }
     return Game;
 }());

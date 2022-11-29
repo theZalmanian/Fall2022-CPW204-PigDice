@@ -44,11 +44,6 @@ class Game {
     currTurnTotal:number;
 
     /**
-     * True if game is over; otherwise False
-     */
-    isGameOver:boolean;
-
-    /**
      * Creates a  game object to keep track of the relevant game data
      * @param currPlayer The player whose turn it is currently (Player 1 at start of game)
      */
@@ -56,7 +51,6 @@ class Game {
         this.currPlayer = currPlayer; // The player going first
         this.nextPlayer = nextPlayer; // The player going second
         this.currTurnTotal = 0; // The game starts at 0 points
-        this.isGameOver = false; // The game is not over when it begins
     }
 }
 
