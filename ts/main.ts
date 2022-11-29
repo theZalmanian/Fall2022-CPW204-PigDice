@@ -639,7 +639,7 @@ function switchPlayer():void {
  * the passed through number (for a six-sided die)
  * @param rollValue The value the six-sided die landed on
  */
-function displayD6Face(rollValue:number):void {
+function displayD6Face(rollValue:number):void {   
     // Based on the rolled value, display the corresponding image
     if(rollValue == 6) {
         getImageByID("roll-display").src = "images/dice-icons/d6-side-6.svg";
@@ -707,7 +707,7 @@ function playerNamesValid():boolean {
 
     // check that both player names are not the same
     if(namesAreValid && player1Name.toLowerCase() == player2Name.toLowerCase()) {
-        displayError("You cannot use the same name for both players!");
+        displayError("You cannot use the same name for both players");
         namesAreValid = false;
     }
 
@@ -725,7 +725,7 @@ function playerNamesValid():boolean {
 function isNameValid(textBoxID:string, whichPlayer:string, playerName:string):boolean {
     // check if the user entered a name
     if(isInputEmpty(textBoxID)) {
-        displayError("You must enter a name for " + whichPlayer + "!");
+        displayError("You must enter a name for " + whichPlayer);
         return false;
     }
 

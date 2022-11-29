@@ -251,14 +251,14 @@ function playerNamesValid() {
         namesAreValid = false;
     }
     if (namesAreValid && player1Name.toLowerCase() == player2Name.toLowerCase()) {
-        displayError("You cannot use the same name for both players!");
+        displayError("You cannot use the same name for both players");
         namesAreValid = false;
     }
     return namesAreValid;
 }
 function isNameValid(textBoxID, whichPlayer, playerName) {
     if (isInputEmpty(textBoxID)) {
-        displayError("You must enter a name for " + whichPlayer + "!");
+        displayError("You must enter a name for " + whichPlayer);
         return false;
     }
     if (playerName.length > 10) {

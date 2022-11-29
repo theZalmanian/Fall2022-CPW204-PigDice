@@ -1,13 +1,16 @@
 /* Color */
 :root {
-    --colorPrimary:    #e0d186;
-    --colorSecondary:  #6dc415;
+    --colorPrimary:    #e8d05c;
+    --colorSecondary:  #c47e15;
     --colorBackground: #002b36;
+    --colorAccent1:    #638475;
+    --colorAccent2:    #CE4760;
 }
 
 body {
     background: var(--colorBackground);
     color: var(--colorPrimary);
+    font-size: large;
 }
 
 body, input[type="button"] {
@@ -41,24 +44,28 @@ h1, h3, input[type="textbox"] {
     border: 3px solid var(--colorSecondary);
 }
 
+#start-game-form, #game-info, #player-scores,
+#turn-display, #game-buttons {
+    display: flex;
+}
+
 #rules-list {
     padding-left: 1.5em;
     margin: .3em;
 }
 
-#rules-list > li {
+li {
     list-style-type: square;
     margin-bottom: .2em;
 }
 
 #error-list {
-    padding-left: 1.5em;
+    padding-left: .5em;
     list-style-type: square;
     color: var(--colorSecondary);
 }
 
 #start-game-form {
-    display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;    
@@ -80,17 +87,21 @@ input[type="textbox"] {
     border: 2px solid var(--colorSecondary);
 }
 
+input[type="textbox"], input[type="button"] {
+    font-weight: bold;
+}
+
 .input-textbox {
     width: 10em;   
     height: 2em;
 }
 
 input[type="textbox"]::placeholder {
-    color: var(--colorBackground);
+    color: var(--colorAccent2);
 }
 
 input[type="textbox"]::-ms-input-placeholder {
-    color: var(--colorBackground);
+    color: var(--colorAccent2);
 }
 
 input[type="button"] {
@@ -104,9 +115,6 @@ input[type="button"] {
 
 input[type="button"]:hover {
     transition: all .3s;
-}
-
-input[type="button"]:hover {
     background: var(--colorSecondary);
     color: var(--colorBackground);
     cursor: pointer;
@@ -125,13 +133,8 @@ input[type="button"][disabled] {
 }
 
 #game-info {
-    display: flex; 
     flex-direction: row;
     align-items: flex-end;
-}
-
-#player-scores {
-    display: flex;
 }
 
 #player1, #player2 {
@@ -145,7 +148,6 @@ input[type="button"][disabled] {
 }
 
 #turn-display, #game-buttons {
-    display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
@@ -163,7 +165,7 @@ input[type="button"][disabled] {
 }
 
 .lds-ellipsis div {
-    background: #ffa800;
+    background: var(--colorAccent2);
     border: 1px solid black;
 }
 
