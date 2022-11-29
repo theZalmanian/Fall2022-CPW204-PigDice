@@ -1,20 +1,28 @@
 /* Color */
 :root {
-    --colorPrimary:    #e8d05c;
+    --colorPrimary:    #edc78f;
     --colorSecondary:  #c47e15;
     --colorBackground: #002b36;
     --colorAccent1:    #638475;
     --colorAccent2:    #CE4760;
 }
 
+#page-title, body, input[type="textbox"], input[type="button"] {
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif; 
+    font-weight: 300;
+}
+
 body {
     background: var(--colorBackground);
     color: var(--colorPrimary);
-    font-size: large;
 }
 
-body, input[type="button"] {
-    font-family: Arial, Helvetica, sans-serif; 
+#pig-dice-game {
+    font-weight: 500;
+}
+
+#page-title, input[type="textbox"], input[type="button"] {
+    font-weight: 800;
 }
 
 header > h1 {
@@ -23,6 +31,11 @@ header > h1 {
 
 h1, h3, input[type="textbox"] {
     text-align: center;
+}
+
+legend {
+    padding-inline-start: .3em;
+    padding-inline-end: .4em;
 }
 
 #page-content {
@@ -85,10 +98,6 @@ input[type="textbox"] {
     background: var(--colorPrimary);
     color: var(--colorBackground);
     border: 2px solid var(--colorSecondary);
-}
-
-input[type="textbox"], input[type="button"] {
-    font-weight: bold;
 }
 
 .input-textbox {
