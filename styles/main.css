@@ -18,7 +18,7 @@ body {
 }
 
 #pig-dice-game, #error-list {
-    font-weight: 500;
+    font-weight: 400;
 }
 
 #page-title, input[type="textbox"], input[type="button"] {
@@ -36,6 +36,7 @@ h1, h3, input[type="textbox"] {
 legend {
     padding-inline-start: .3em;
     padding-inline-end: .4em;
+    font-weight: 400;
 }
 
 #page-content {
