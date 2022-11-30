@@ -558,6 +558,9 @@ function rollD6():void {
     if(rollValue != 1) {
         // add the rolled value to the turn total
         pigDice.currGame.currTurnTotal += rollValue;
+
+        // enable both game buttons
+        enableGameButtons();
     }
 
     // display roll value
@@ -566,9 +569,6 @@ function rollD6():void {
     // get and display the current total on page
     let currTotal:string = pigDice.currGame.currTurnTotal.toString();
     getInputByID("turn-total").value = currTotal;
-
-    // enable both game buttons
-    enableGameButtons();
 }
 
 /**

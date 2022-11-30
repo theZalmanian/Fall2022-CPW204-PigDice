@@ -184,11 +184,11 @@ function rollD6() {
     }
     if (rollValue != 1) {
         pigDice.currGame.currTurnTotal += rollValue;
+        enableGameButtons();
     }
     displayD6Face(rollValue);
     var currTotal = pigDice.currGame.currTurnTotal.toString();
     getInputByID("turn-total").value = currTotal;
-    enableGameButtons();
 }
 function passTurn() {
     var turnTotal = pigDice.currGame.currTurnTotal;
