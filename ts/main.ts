@@ -529,6 +529,9 @@ function removePreloader():void {
  * six-sided die and displays the roll value on the page
  */
 function rollDie() {
+    // disable both game buttons to avoid spam
+    disableGameButtons();
+
     // display roll transition image
     displayD6Roll();
     
@@ -563,6 +566,9 @@ function rollD6():void {
     // get and display the current total on page
     let currTotal:string = pigDice.currGame.currTurnTotal.toString();
     getInputByID("turn-total").value = currTotal;
+
+    // enable both game buttons
+    enableGameButtons();
 }
 
 /**

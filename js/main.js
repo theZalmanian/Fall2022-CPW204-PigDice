@@ -172,6 +172,7 @@ function removePreloader() {
     getByID("preloader").remove();
 }
 function rollDie() {
+    disableGameButtons();
     displayD6Roll();
     setTimeout(rollD6, 1000);
 }
@@ -187,6 +188,7 @@ function rollD6() {
     displayD6Face(rollValue);
     var currTotal = pigDice.currGame.currTurnTotal.toString();
     getInputByID("turn-total").value = currTotal;
+    enableGameButtons();
 }
 function passTurn() {
     var turnTotal = pigDice.currGame.currTurnTotal;
