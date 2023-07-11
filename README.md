@@ -1,5 +1,5 @@
-# Fall2022-CPW204-PigDice
-A pig dice game site. Two players take turns rolling a die until one reaches 100 points, at which point they win the game.
+# Pig Dice
+A website implementing the pig dice game. Two players take turns rolling a die until one reaches 100 points, at which point they win the game.
 
 ## Live Site
 https://zalmanian-pig-dice.netlify.app/
