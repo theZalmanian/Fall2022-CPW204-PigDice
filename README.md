@@ -4,6 +4,13 @@ A website implementing the pig dice game. Two players take turns rolling a die u
 ## Live Site
 https://zalmanian-pig-dice.netlify.app/
 
+## Cool things that were not required, but I did anyway
+- Used classes to keep track of the game state.
+- Dynamically created and deleted necessary forms at the start and end of game.
+- Utilized SVGs to simulate animations when players roll the die.
+- Utilized pre-loader library to display loading animation during game calculations.
+- Used CSS to style the page, namely using flex to create an organized layout.
+
 ## Project Screenshots
 #### Site on startup (PC):
 ![PigDiceStartGame](https://user-images.githubusercontent.com/103011701/204677762-6ef7bb98-f6cf-4b20-b1c7-f989ff4eb753.png)
